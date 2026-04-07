@@ -1,4 +1,4 @@
-# PV260 - Software Quality
+# PV260 - Software Quality - Team 4
 
 This repository contains a team project for the Notino C# seminar (Spring 2026).
 
@@ -12,3 +12,9 @@ This repository contains a team project for the Notino C# seminar (Spring 2026).
 **Tutors:**
 - [Erika Bača](https://is.muni.cz/auth/osoba/540487)
 - [Erik Matuška](https://is.muni.cz/auth/osoba/493344)
+
+
+## Milestone 1
+
+- User stories can be found in [UserStories.md](./milestone-1/UserStories.md),
+- Both Event Storming diagrams can be found in [this Figma project](https://www.figma.com/design/4zr5DygxWv04pkiNtFw7he).
