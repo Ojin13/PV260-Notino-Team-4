@@ -1,6 +1,14 @@
-# PV260-Notino-Team-4
+# PV260 - Software Quality
 
-## Milestone 1
+This repository contains a team project for the Notino C# seminar (Spring 2026).
 
-- User stories can be found in [UserStories.md](./UserStories.md),
-- Both Event Storming diagrams can be found in [this Figma project](https://www.figma.com/design/4zr5DygxWv04pkiNtFw7he).
+**Members:**
+- [Robin Chmelík](https://is.muni.cz/auth/osoba/514315)
+- [Matej Kučera](https://is.muni.cz/auth/osoba/514093)
+- [Adam Haluška](https://is.muni.cz/auth/osoba/536303)
+- [Radoslav Baník](https://is.muni.cz/auth/osoba/536584)
+- [Matúš Fedorko](https://is.muni.cz/auth/osoba/matus.fedorko)
+
+**Tutors:**
+- [Erika Bača](https://is.muni.cz/auth/osoba/540487)
+- [Erik Matuška](https://is.muni.cz/auth/osoba/493344)
