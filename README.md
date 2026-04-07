@@ -1,4 +1,4 @@
-# PV260 - Software Quality
+# PV260 - Software Quality - Team 4
 
 This repository contains a team project for the Notino C# seminar (Spring 2026).
 
