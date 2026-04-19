@@ -1,0 +1,105 @@
+using Microsoft.OpenApi.Models;
+using Popocatepetl.Api.Services;
+using Popocatepetl.Application;
+using Popocatepetl.Application.Common;
+using Popocatepetl.Infrastructure;
+using Popocatepetl.Infrastructure.Data;
+
+var builder = WebApplication.CreateBuilder(args);
+
+// ── MVC + Swagger ─────────────────────────────────────────────────────────────
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title   = "Popocatepetl API (dev/testing)",
+        Version = "v1",
+        Description = """
+            This is a temporary testing interface.
+            All endpoints map directly to application use cases.
+            Set X-User-Email and X-User-Role headers to simulate different users.
+            Admin password enforcement is skipped in this layer —
+            the auth pipeline only runs when the CLI is active.
+            """,
+    });
+
+    // Make both identity headers appear as lock icons on every endpoint.
+    options.AddSecurityDefinition("EmailHeader", new OpenApiSecurityScheme
+    {
+        Name        = "X-User-Email",
+        Type        = SecuritySchemeType.ApiKey,
+        In          = ParameterLocation.Header,
+        Description = "Set your email address for audit logging",
+    });
+
+    options.AddSecurityDefinition("RoleHeader", new OpenApiSecurityScheme
+    {
+        Name        = "X-User-Role",
+        Type        = SecuritySchemeType.ApiKey,
+        In          = ParameterLocation.Header,
+        Description = "Set role: Admin, PowerUser, or User",
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id   = "EmailHeader",
+                },
+            },
+            []
+        },
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id   = "RoleHeader",
+                },
+            },
+            []
+        },
+    });
+
+    // Include XML doc comments from this assembly in Swagger UI.
+    var xmlFile = $"{typeof(Program).Assembly.GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath))
+        options.IncludeXmlComments(xmlPath);
+});
+
+// ── Application services ──────────────────────────────────────────────────────
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+
+// ICurrentUserContext reads X-User-Email / X-User-Role from each incoming request.
+builder.Services.AddScoped<ICurrentUserContext, HttpCurrentUserContext>();
+
+// ── Build ─────────────────────────────────────────────────────────────────────
+var app = builder.Build();
+
+// Ensure the SQLite schema exists on first run.
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<PopocatepetlDbContext>();
+    await db.Database.EnsureCreatedAsync();
+}
+
+// ── Middleware pipeline ───────────────────────────────────────────────────────
+app.UseSwagger();
+app.UseSwaggerUI(ui =>
+{
+    ui.SwaggerEndpoint("/swagger/v1/swagger.json", "Popocatepetl API v1");
+    ui.RoutePrefix = "swagger";
+});
+
+app.MapControllers();
+app.Run();
