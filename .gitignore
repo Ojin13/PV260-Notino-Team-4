@@ -12,3 +12,7 @@ riderModule.iml
 # AI / IDE assistant files
 .claude/
 .idea/
+
+
+# IDE files
+.vs/
