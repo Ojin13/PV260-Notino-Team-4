@@ -19,6 +19,6 @@ public sealed class DiffResultConfiguration : IEntityTypeConfiguration<DiffResul
         builder.Property(x => x.GeneratedAt)
             .IsRequired();
 
-        builder.Ignore(x => x.DiffResults);
+        builder.Ignore(x => x.DiffDataEntries);
     }
 }

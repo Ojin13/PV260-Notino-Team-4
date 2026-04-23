@@ -5,6 +5,6 @@ public class DiffResult()
 {
     public Guid BaselineReportId { get; init; }
     public Guid CurrentReportId { get; init; }
-    public IEnumerable<DiffResult> DiffResults { get; init; } = [];
+    public IEnumerable<DiffData> DiffDataEntries { get; init; } = [];
     public DateTime GeneratedAt { get; init; }
 }
