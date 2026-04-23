@@ -9,7 +9,6 @@ public static class DatabaseSeeder
     {
         var dbContext =  serviceProvider.GetRequiredService<PopocatepetlDbContext>();
         await ReportSeeder.SeedAsync(dbContext);
-        await DiffDataSeeder.SeedAsync(dbContext);
         await DiffResultSeeder.SeedAsync(dbContext);
         await AuditLogSeeder.SeedAsync(dbContext);
     }
