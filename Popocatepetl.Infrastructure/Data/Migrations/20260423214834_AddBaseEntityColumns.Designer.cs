@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Popocatepetl.Infrastructure.Data;
 
@@ -10,9 +11,11 @@ using Popocatepetl.Infrastructure.Data;
 namespace Popocatepetl.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(PopocatepetlDbContext))]
-    partial class PopocatepetlDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260423214834_AddBaseEntityColumns")]
+    partial class AddBaseEntityColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.4");

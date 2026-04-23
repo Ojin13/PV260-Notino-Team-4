@@ -1,6 +1,9 @@
 using MediatR;
+using Popocatepetl.Application.Common;
 
 namespace Popocatepetl.Application.Commands;
 
-/// <summary>Deletes the user identified by Id.</summary>
-public record DeleteUserCommand(Guid Id) : IRequest;
+public record DeleteUserCommand(Guid Id) : IRequest, IAuditableRequest
+{
+    public string ActionName => "DeleteUser";
+}

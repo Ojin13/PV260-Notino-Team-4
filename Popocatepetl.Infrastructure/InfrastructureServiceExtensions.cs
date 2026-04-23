@@ -40,6 +40,7 @@ public static class InfrastructureServiceExtensions
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IDiffResultRepository, DiffResultRepository>();
+        services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 
         return services;
     }
