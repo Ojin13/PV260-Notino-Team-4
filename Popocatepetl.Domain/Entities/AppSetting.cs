@@ -8,4 +8,17 @@ public class AppSetting
 
     /// <summary>The value associated with the key.</summary>
     public string Value { get; set; } = string.Empty;
+
+    private AppSetting()
+    {
+    }
+
+    public static AppSetting Create(string key, string value)
+    {
+        return new AppSetting
+        {
+            Key = key,
+            Value = value
+        };
+    }
 }

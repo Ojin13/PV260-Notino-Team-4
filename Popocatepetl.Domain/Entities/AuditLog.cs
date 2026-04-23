@@ -20,4 +20,29 @@ public class AuditLog
 
     /// <summary>Optional extra context or error details about the action.</summary>
     public string? Details { get; init; }
+
+    private AuditLog()
+    {
+    }
+
+    public static AuditLog Create(
+        string userEmail,
+        string action,
+        DateTime? occurredAt,
+        bool wasSuccessful,
+        string? details
+    )
+    {
+        return new AuditLog
+        {
+            Id = Guid.NewGuid(),
+            UserEmail = userEmail,
+            Action = action,
+            OccurredAt = occurredAt ?? DateTime.UtcNow,
+            WasSuccessful = wasSuccessful,
+            Details = details
+        };
+    }
+    
+    
 }

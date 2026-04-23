@@ -94,6 +94,7 @@ await using (var scope = app.Services.CreateAsyncScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<PopocatepetlDbContext>();
         await db.Database.MigrateAsync();
+        await DatabaseSeeder.SeedAsync(scope.ServiceProvider);
     }
     catch (Exception ex)
     {

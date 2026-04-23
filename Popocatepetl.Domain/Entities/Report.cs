@@ -20,4 +20,27 @@ public class Report
 
     /// <summary>Whether this is the most recently uploaded report.</summary>
     public bool IsLatest { get; set; }
+
+    private Report()
+    {
+    }
+
+    public static Report Create(
+        string fileName,
+        string uploadedByEmail,
+        string rawContent,
+        bool isLatest,
+        DateTime? uploadedAt = null,
+        Guid? id = null)
+    {
+        return new Report
+        {
+            Id = id ?? Guid.NewGuid(),
+            FileName = fileName,
+            UploadedAt = uploadedAt ?? DateTime.UtcNow,
+            UploadedByEmail = uploadedByEmail,
+            RawContent = rawContent,
+            IsLatest = isLatest
+        };
+    }
 }
