@@ -6,7 +6,6 @@ using Popocatepetl.Domain.Entities;
 
 namespace Popocatepetl.Api.Controllers;
 
-/// <summary>Endpoints for managing application users.</summary>
 [ApiController]
 [Route("api/users")]
 public sealed class UsersController(ISender sender) : ControllerBase
@@ -56,8 +55,5 @@ public sealed class UsersController(ISender sender) : ControllerBase
     }
 }
 
-/// <summary>Request body for creating a user.</summary>
 public record CreateUserRequest(string Email);
-
-/// <summary>Request body for updating a user.</summary>
 public record UpdateUserRequest(string Email);

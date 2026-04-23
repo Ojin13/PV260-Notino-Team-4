@@ -4,6 +4,7 @@ using Popocatepetl.Api.Services;
 using Popocatepetl.Application;
 using Popocatepetl.Application.Common;
 using Popocatepetl.Infrastructure;
+using Popocatepetl.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
