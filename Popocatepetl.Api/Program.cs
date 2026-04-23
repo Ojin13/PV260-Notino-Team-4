@@ -14,7 +14,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title   = "Popocatepetl API (dev/testing)",
+        Title = "Popocatepetl API (dev/testing)",
         Version = "v1",
         Description = """
             This is a temporary testing interface.
@@ -28,17 +28,17 @@ builder.Services.AddSwaggerGen(options =>
     // Make both identity headers appear as lock icons on every endpoint.
     options.AddSecurityDefinition("EmailHeader", new OpenApiSecurityScheme
     {
-        Name        = "X-User-Email",
-        Type        = SecuritySchemeType.ApiKey,
-        In          = ParameterLocation.Header,
+        Name = "X-User-Email",
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
         Description = "Set your email address for audit logging",
     });
 
     options.AddSecurityDefinition("RoleHeader", new OpenApiSecurityScheme
     {
-        Name        = "X-User-Role",
-        Type        = SecuritySchemeType.ApiKey,
-        In          = ParameterLocation.Header,
+        Name = "X-User-Role",
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
         Description = "Set role: Admin, PowerUser, or User",
     });
 

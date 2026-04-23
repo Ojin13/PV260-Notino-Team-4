@@ -38,7 +38,7 @@ public static class DiffDataSeeder
                 seed.ShareDiffType,
                 seed.WeightPercent,
                 seed.Id);
-            
+
             dbContext.DiffData.Add(entry);
         }
 
