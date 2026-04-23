@@ -4,11 +4,9 @@ using Popocatepetl.Api.Services;
 using Popocatepetl.Application;
 using Popocatepetl.Application.Common;
 using Popocatepetl.Infrastructure;
-using Popocatepetl.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ── MVC + Swagger ─────────────────────────────────────────────────────────────
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -85,12 +83,11 @@ await using (var scope = app.Services.CreateAsyncScope())
     {
         var db = scope.ServiceProvider.GetRequiredService<PopocatepetlDbContext>();
         await db.Database.MigrateAsync();
-        await DatabaseSeeder.SeedAsync(scope.ServiceProvider);
     }
     catch (Exception ex)
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogWarning(ex, "Database migration or seeding skipped (database may not be available).");
+        logger.LogWarning(ex, "Database migration skipped (database may not be available).");
     }
 }
 
