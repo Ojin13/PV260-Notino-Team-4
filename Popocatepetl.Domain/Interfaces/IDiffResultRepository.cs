@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Popocatepetl.Domain.Entities;
 
-namespace Popocatepetl.Domain.Interfaces
+namespace Popocatepetl.Domain.Interfaces;
+
+public interface IDiffResultRepository
 {
-    internal class IDiffReportRepository
-    {
-    }
+    Task<DiffResult?> GetLastAsync();
+
+    Task CreateAsync(DiffResult diffResult);
 }

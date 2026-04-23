@@ -21,6 +21,7 @@ public static class InfrastructureServiceExtensions
             options.UseSqlite($"Data Source={dbPath}"));
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IDiffResultRepository, DiffResultRepository>();
 
         return services;
     }
