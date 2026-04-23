@@ -69,25 +69,16 @@ builder.Services.AddSwaggerGen(options =>
         },
     });
 
-    // Include XML doc comments from this assembly in Swagger UI.
-    var xmlFile = $"{typeof(Program).Assembly.GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
-        options.IncludeXmlComments(xmlPath);
 });
 
-// ── Application services ──────────────────────────────────────────────────────
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// ICurrentUserContext reads X-User-Email / X-User-Role from each incoming request.
 builder.Services.AddScoped<ICurrentUserContext, HttpCurrentUserContext>();
 
-// ── Build ─────────────────────────────────────────────────────────────────────
 var app = builder.Build();
 
-// Ensure the SQLite schema exists on first run.
 await using (var scope = app.Services.CreateAsyncScope())
 {
     try
@@ -103,7 +94,7 @@ await using (var scope = app.Services.CreateAsyncScope())
     }
 }
 
-// ── Middleware pipeline ───────────────────────────────────────────────────────
+// Middleware pipeline
 app.UseSwagger();
 app.UseSwaggerUI(ui =>
 {
