@@ -8,7 +8,7 @@ public sealed class DiffResultConfiguration : IEntityTypeConfiguration<DiffResul
 {
     public void Configure(EntityTypeBuilder<DiffResult> builder)
     {
-        builder.HasNoKey();
+        builder.HasKey(x => new { x.BaselineReportId, x.CurrentReportId });
 
         builder.Property(x => x.BaselineReportId)
             .IsRequired();
@@ -18,6 +18,16 @@ public sealed class DiffResultConfiguration : IEntityTypeConfiguration<DiffResul
 
         builder.Property(x => x.GeneratedAt)
             .IsRequired();
+
+        builder.HasOne(x => x.BaselineReport)
+            .WithMany()
+            .HasForeignKey(x => x.BaselineReportId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.CurrentReport)
+            .WithMany()
+            .HasForeignKey(x => x.CurrentReportId)
+            .OnDelete(DeleteBehavior.Restrict);
 
         builder.Ignore(x => x.DiffResults);
     }
