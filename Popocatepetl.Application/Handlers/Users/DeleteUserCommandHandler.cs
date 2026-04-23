@@ -2,7 +2,7 @@ using MediatR;
 using Popocatepetl.Application.Commands;
 using Popocatepetl.Domain.Interfaces;
 
-namespace Popocatepetl.Application.Handlers;
+namespace Popocatepetl.Application.Handlers.Users;
 
 /// <summary>Handles DeleteUserCommand.</summary>
 public sealed class DeleteUserCommandHandler(
