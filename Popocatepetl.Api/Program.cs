@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Popocatepetl.Api.Services;
 using Popocatepetl.Application;
@@ -89,8 +90,16 @@ var app = builder.Build();
 // Ensure the SQLite schema exists on first run.
 await using (var scope = app.Services.CreateAsyncScope())
 {
-    var db = scope.ServiceProvider.GetRequiredService<PopocatepetlDbContext>();
-    await db.Database.EnsureCreatedAsync();
+    try
+    {
+        var db = scope.ServiceProvider.GetRequiredService<PopocatepetlDbContext>();
+        await db.Database.MigrateAsync();
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogWarning(ex, "Database migration or seeding skipped (database may not be available).");
+    }
 }
 
 // ── Middleware pipeline ───────────────────────────────────────────────────────

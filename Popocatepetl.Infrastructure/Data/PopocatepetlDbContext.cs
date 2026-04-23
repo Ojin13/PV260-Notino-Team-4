@@ -1,6 +1,5 @@
 using Microsoft.EntityFrameworkCore;
 using Popocatepetl.Domain.Entities;
-using Popocatepetl.Infrastructure.Data.Configurations;
 
 namespace Popocatepetl.Infrastructure.Data;
 
@@ -9,9 +8,15 @@ public sealed class PopocatepetlDbContext(DbContextOptions<PopocatepetlDbContext
 {
     /// <summary>All registered users.</summary>
     public DbSet<AppUser> Users => Set<AppUser>();
+    public DbSet<AppSetting> AppSettings => Set<AppSetting>();
+    public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
+    public DbSet<Report> Reports => Set<Report>();
+    public DbSet<DiffResult> DiffResults => Set<DiffResult>();
+    public DbSet<DiffData> DiffData => Set<DiffData>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new AppUserConfiguration());
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(PopocatepetlDbContext).Assembly);
     }
 }
