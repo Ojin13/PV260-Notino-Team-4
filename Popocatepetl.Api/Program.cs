@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Popocatepetl.Api.Services;
@@ -9,7 +10,9 @@ using Popocatepetl.Infrastructure.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // ── MVC + Swagger ─────────────────────────────────────────────────────────────
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {

@@ -1,89 +1,111 @@
 using Popocatepetl.Application.Commands;
+using Popocatepetl.Application.Common;
 using Popocatepetl.Application.Tests.TestUtilities;
+using Popocatepetl.Domain.Entities;
+using Popocatepetl.Domain.Enums;
+using Popocatepetl.Domain.Exceptions;
 using Popocatepetl.Domain.Interfaces;
 
 namespace Popocatepetl.Application.Tests.Handlers.SendEmail;
 
 public class SendEmailCommandHandlerTests : HandlerTestBase
 {
-    private const string Subject = "Hello";
-    private const string Body = "World";
     private static readonly IReadOnlyList<string> Recipients = ["alice@example.com", "bob@example.com"];
 
-    [Fact]
-    public async Task Handle_WithValidInput_CallsEmailServiceOnce()
+    private static readonly DiffResult SampleDiff = new()
     {
-        var command = new SendEmailCommand(Subject, Body, Recipients);
+        BaselineReportId = Guid.NewGuid(),
+        CurrentReportId = Guid.NewGuid(),
+        GeneratedAt = new DateTime(2026, 04, 23, 10, 0, 0, DateTimeKind.Utc),
+    };
 
-        await Mediator.Send(command);
+    private static readonly IReadOnlyList<DiffData> SampleRows =
+    [
+        new() { Id = Guid.NewGuid(), Name = "Tesla", Ticker = "TSLA", Shares = 1_000_000,
+                SharesDiffPercent = 2.5, ShareDiffType = ShareDiffType.Increased, WeightPercent = 9.87 },
+    ];
 
-        EmailService.Verify(
-            s => s.SendAsync(Subject, Body, Recipients),
+    private void SetupLatestDiff() => DiffRepository
+        .Setup(r => r.GetLatestAsync(It.IsAny<CancellationToken>()))
+        .ReturnsAsync(new LatestDiff(SampleDiff, SampleRows));
+
+    [Fact]
+    public async Task Handle_CsvFormat_SendsEmailWithCsvAttachment()
+    {
+        SetupLatestDiff();
+        var csvBytes = new byte[] { 1, 2, 3 };
+        DiffExporter.Setup(e => e.ToCsv(SampleDiff, SampleRows)).Returns(csvBytes);
+
+        await Mediator.Send(new SendEmailCommand(Recipients, DiffExportFormat.Csv));
+
+        EmailService.Verify(s => s.SendAsync(
+            It.IsAny<string>(),
+            It.IsAny<string>(),
+            Recipients,
+            It.Is<MailAttachment>(a =>
+                a.FileName == "ARKK_diff_20260423.csv" &&
+                a.ContentType == "text/csv" &&
+                a.Content == csvBytes)),
             Times.Once);
     }
 
     [Fact]
-    public async Task Handle_WithEmptyRecipients_ThrowsAndDoesNotCallService()
+    public async Task Handle_PdfFormat_SendsEmailWithPdfAttachment()
     {
-        var command = new SendEmailCommand(Subject, Body, []);
+        SetupLatestDiff();
+        var pdfBytes = new byte[] { 0x25, 0x50, 0x44, 0x46 }; // "%PDF"
+        DiffExporter.Setup(e => e.ToPdf(SampleDiff, SampleRows)).Returns(pdfBytes);
 
-        var act = async () => await Mediator.Send(command);
+        await Mediator.Send(new SendEmailCommand(Recipients, DiffExportFormat.Pdf));
 
-        await act.Should().ThrowAsync<ArgumentException>();
-        EmailService.Verify(
-            s => s.SendAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>()),
+        EmailService.Verify(s => s.SendAsync(
+            It.IsAny<string>(),
+            It.IsAny<string>(),
+            Recipients,
+            It.Is<MailAttachment>(a =>
+                a.FileName == "ARKK_diff_20260423.pdf" &&
+                a.ContentType == "application/pdf" &&
+                a.Content == pdfBytes)),
+            Times.Once);
+    }
+
+    [Fact]
+    public async Task Handle_WhenNoDiffExists_ThrowsNotFoundAndDoesNotSend()
+    {
+        DiffRepository
+            .Setup(r => r.GetLatestAsync(It.IsAny<CancellationToken>()))
+            .ReturnsAsync((LatestDiff?)null);
+
+        var act = async () => await Mediator.Send(new SendEmailCommand(Recipients, DiffExportFormat.Csv));
+
+        await act.Should().ThrowAsync<NotFoundException>();
+        EmailService.Verify(s => s.SendAsync(
+            It.IsAny<string>(), It.IsAny<string>(),
+            It.IsAny<IEnumerable<string>>(), It.IsAny<MailAttachment?>()),
             Times.Never);
     }
 
-    [Theory]
-    [InlineData("")]
-    [InlineData("   ")]
-    public async Task Handle_WithMissingSubject_Throws(string subject)
+    [Fact]
+    public async Task Handle_WithEmptyRecipients_ThrowsAndDoesNotTouchRepository()
     {
-        var command = new SendEmailCommand(subject, Body, Recipients);
-
-        var act = async () => await Mediator.Send(command);
+        var act = async () => await Mediator.Send(new SendEmailCommand([], DiffExportFormat.Csv));
 
         await act.Should().ThrowAsync<ArgumentException>();
-    }
-
-    [Theory]
-    [InlineData("")]
-    [InlineData("   ")]
-    public async Task Handle_WithMissingBody_Throws(string body)
-    {
-        var command = new SendEmailCommand(Subject, body, Recipients);
-
-        var act = async () => await Mediator.Send(command);
-
-        await act.Should().ThrowAsync<ArgumentException>();
+        DiffRepository.Verify(r => r.GetLatestAsync(It.IsAny<CancellationToken>()), Times.Never);
+        EmailService.Verify(s => s.SendAsync(
+            It.IsAny<string>(), It.IsAny<string>(),
+            It.IsAny<IEnumerable<string>>(), It.IsAny<MailAttachment?>()),
+            Times.Never);
     }
 
     [Fact]
     public async Task Handle_WithMalformedRecipient_Throws()
     {
-        var command = new SendEmailCommand(Subject, Body, ["alice@example.com", "not-an-email"]);
-
-        var act = async () => await Mediator.Send(command);
+        var act = async () => await Mediator.Send(
+            new SendEmailCommand(["alice@example.com", "not-an-email"], DiffExportFormat.Csv));
 
         (await act.Should().ThrowAsync<ArgumentException>())
             .Which.Message.Should().Contain("not-an-email");
-        EmailService.Verify(
-            s => s.SendAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>()),
-            Times.Never);
-    }
-
-    [Fact]
-    public async Task Handle_WhenEmailServiceThrows_PropagatesException()
-    {
-        EmailService
-            .Setup(s => s.SendAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>()))
-            .ThrowsAsync(new InvalidOperationException("resend down"));
-
-        var command = new SendEmailCommand(Subject, Body, Recipients);
-
-        var act = async () => await Mediator.Send(command);
-
-        await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("resend down");
+        DiffRepository.Verify(r => r.GetLatestAsync(It.IsAny<CancellationToken>()), Times.Never);
     }
 }

@@ -10,17 +10,23 @@ public abstract class HandlerTestBase : IDisposable
 
     protected IMediator Mediator { get; }
     protected Mock<IEmailService> EmailService { get; }
+    protected Mock<IDiffRepository> DiffRepository { get; }
+    protected Mock<IDiffExporter> DiffExporter { get; }
 
     protected HandlerTestBase()
     {
         var builder = new MockedIocBuilder();
         builder
             .AddMockedEmailService(out var emailService)
+            .AddMockedDiffRepository(out var diffRepository)
+            .AddMockedDiffExporter(out var diffExporter)
             .AddMediatR(typeof(DependencyInjection).Assembly);
 
         _serviceProvider = builder.Build();
         Mediator = _serviceProvider.GetRequiredService<IMediator>();
         EmailService = emailService;
+        DiffRepository = diffRepository;
+        DiffExporter = diffExporter;
     }
 
     public void Dispose()

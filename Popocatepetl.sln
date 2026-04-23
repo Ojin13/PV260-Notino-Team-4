@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Popocatepetl.Api", "Popocat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Popocatepetl.Application.Tests", "Popocatepetl.Application.Tests\Popocatepetl.Application.Tests.csproj", "{6EEAA860-ED44-497B-8174-2D035D6CA366}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Popocatepetl.Infrastructure.Tests", "Popocatepetl.Infrastructure.Tests\Popocatepetl.Infrastructure.Tests.csproj", "{81225D7E-56F4-4333-B321-04F458D434E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -96,6 +98,18 @@ Global
 		{6EEAA860-ED44-497B-8174-2D035D6CA366}.Release|x64.Build.0 = Release|Any CPU
 		{6EEAA860-ED44-497B-8174-2D035D6CA366}.Release|x86.ActiveCfg = Release|Any CPU
 		{6EEAA860-ED44-497B-8174-2D035D6CA366}.Release|x86.Build.0 = Release|Any CPU
+		{81225D7E-56F4-4333-B321-04F458D434E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81225D7E-56F4-4333-B321-04F458D434E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81225D7E-56F4-4333-B321-04F458D434E9}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{81225D7E-56F4-4333-B321-04F458D434E9}.Debug|x64.Build.0 = Debug|Any CPU
+		{81225D7E-56F4-4333-B321-04F458D434E9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{81225D7E-56F4-4333-B321-04F458D434E9}.Debug|x86.Build.0 = Debug|Any CPU
+		{81225D7E-56F4-4333-B321-04F458D434E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81225D7E-56F4-4333-B321-04F458D434E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81225D7E-56F4-4333-B321-04F458D434E9}.Release|x64.ActiveCfg = Release|Any CPU
+		{81225D7E-56F4-4333-B321-04F458D434E9}.Release|x64.Build.0 = Release|Any CPU
+		{81225D7E-56F4-4333-B321-04F458D434E9}.Release|x86.ActiveCfg = Release|Any CPU
+		{81225D7E-56F4-4333-B321-04F458D434E9}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

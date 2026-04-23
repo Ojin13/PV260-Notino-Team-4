@@ -10,13 +10,14 @@ namespace Popocatepetl.Api.Controllers;
 [Route("api/email")]
 public sealed class EmailController(ISender sender) : ControllerBase
 {
-    /// <summary>Sends a plain-text email to the specified recipients.</summary>
+    /// <summary>Sends the latest generated ARKK diff as an email attachment to the specified recipients.</summary>
     [HttpPost("send")]
     [ProducesResponseType(StatusCodes.Status202Accepted)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Send([FromBody] SendEmailRequest request, CancellationToken ct)
     {
-        await sender.Send(new SendEmailCommand(request.Subject, request.Body, request.Recipients), ct);
+        await sender.Send(new SendEmailCommand(request.Recipients, request.Format), ct);
         return Accepted();
     }
 }

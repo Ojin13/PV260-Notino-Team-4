@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Options;
+using Popocatepetl.Domain.Entities;
 using Popocatepetl.Domain.Interfaces;
 using Resend;
 
@@ -11,7 +12,11 @@ public sealed class ResendEmailService(
 {
     private readonly ResendOptions _options = options.Value;
 
-    public async Task SendAsync(string subject, string body, IEnumerable<string> recipients)
+    public async Task SendAsync(
+        string subject,
+        string body,
+        IEnumerable<string> recipients,
+        MailAttachment? attachment = null)
     {
         var message = new EmailMessage
         {
@@ -22,6 +27,17 @@ public sealed class ResendEmailService(
 
         foreach (var recipient in recipients)
             message.To.Add(recipient);
+
+        if (attachment is not null)
+        {
+            message.Attachments ??= [];
+            message.Attachments.Add(new EmailAttachment
+            {
+                Filename = attachment.FileName,
+                Content = attachment.Content,
+                ContentType = attachment.ContentType,
+            });
+        }
 
         await resend.EmailSendAsync(message);
     }
