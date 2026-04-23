@@ -4,7 +4,7 @@ using Popocatepetl.Domain.Entities;
 using Popocatepetl.Domain.Exceptions;
 using Popocatepetl.Domain.Interfaces;
 
-namespace Popocatepetl.Application.Handlers;
+namespace Popocatepetl.Application.Handlers.Users;
 
 /// <summary>Handles UpdateUserCommand.</summary>
 public sealed class UpdateUserCommandHandler(

@@ -3,7 +3,7 @@ using Popocatepetl.Application.Commands;
 using Popocatepetl.Domain.Entities;
 using Popocatepetl.Domain.Interfaces;
 
-namespace Popocatepetl.Application.Handlers;
+namespace Popocatepetl.Application.Handlers.Users;
 
 /// <summary>Handles CreateUserCommand.</summary>
 public sealed class CreateUserCommandHandler(
@@ -11,12 +11,7 @@ public sealed class CreateUserCommandHandler(
 {
     public async Task<AppUser> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
-        var user = new AppUser
-        {
-            Id        = Guid.NewGuid(),
-            Email     = request.Email,
-            CreatedAt = DateTime.UtcNow,
-        };
+        var user = AppUser.Create(request.Email, DateTime.UtcNow);
 
         await userRepository.AddAsync(user);
         return user;
