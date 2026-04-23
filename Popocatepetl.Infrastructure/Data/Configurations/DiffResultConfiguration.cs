@@ -29,6 +29,6 @@ public sealed class DiffResultConfiguration : IEntityTypeConfiguration<DiffResul
             .HasForeignKey(x => x.CurrentReportId)
             .OnDelete(DeleteBehavior.Restrict);
 
-        builder.Ignore(x => x.DiffResults);
+        builder.Ignore(x => x.DiffDataEntries);
     }
 }
