@@ -1,24 +1,18 @@
+using Popocatepetl.Domain.Enums;
+
 namespace Popocatepetl.Domain.Entities;
 
-/// <summary>A key-value application configuration entry.</summary>
 public class AppSetting
 {
-    /// <summary>Unique key identifying the setting.</summary>
-    public string Key { get; init; } = string.Empty;
-
-    /// <summary>The value associated with the key.</summary>
+    public AppSettingType Type { get; init; }
     public string Value { get; set; } = string.Empty;
 
-    private AppSetting()
-    {
-    }
+    private AppSetting() { }
 
-    public static AppSetting Create(string key, string value)
-    {
-        return new AppSetting
+    public static AppSetting Create(AppSettingType type, string value) =>
+        new AppSetting
         {
-            Key = key,
+            Type = type,
             Value = value
         };
-    }
 }

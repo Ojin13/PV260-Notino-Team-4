@@ -1,10 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using Popocatepetl.Domain.Entities;
 using Popocatepetl.Domain.Interfaces;
 using Popocatepetl.Infrastructure.Data;
 
 namespace Popocatepetl.Infrastructure.Repositories;
 
-public class Repository<T>(PopocatepetlDbContext context) : IRepository<T> where T : class
+public class Repository<T>(PopocatepetlDbContext context) : IRepository<T> where T : BaseEntity
 {
     protected readonly PopocatepetlDbContext Context = context;
 
@@ -12,7 +13,7 @@ public class Repository<T>(PopocatepetlDbContext context) : IRepository<T> where
         await context.Set<T>().AsNoTracking().ToListAsync();
 
     public async Task<T?> GetByIdAsync(Guid id) =>
-        await context.Set<T>().FindAsync(id);
+        await context.Set<T>().FirstOrDefaultAsync(e => e.Id == id);
 
     public async Task AddAsync(T entity)
     {
@@ -28,11 +29,6 @@ public class Repository<T>(PopocatepetlDbContext context) : IRepository<T> where
 
     public async Task DeleteAsync(Guid id)
     {
-        var entity = await context.Set<T>().FindAsync(id);
-        if (entity is not null)
-        {
-            context.Set<T>().Remove(entity);
-            await context.SaveChangesAsync();
-        }
+        await context.Set<T>().Where(e => e.Id == id).ExecuteDeleteAsync();
     }
 }

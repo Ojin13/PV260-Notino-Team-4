@@ -1,7 +1,6 @@
 namespace Popocatepetl.Domain.Entities;
 
-/// <summary>Immutable value object representing the diff between two reports.</summary>
-public class DiffResult
+public class DiffResult : BaseEntity
 {
     public Guid BaselineReportId { get; init; }
     public Guid CurrentReportId { get; init; }
@@ -10,22 +9,16 @@ public class DiffResult
     public IEnumerable<DiffData> DiffDataEntries { get; init; } = [];
     public DateTime GeneratedAt { get; init; }
 
-    private DiffResult()
-    {
-    }
+    private DiffResult() { }
 
-    public static DiffResult Create(
-        Guid baselineReportId,
-        Guid currentReportId,
-        DateTime? generatedAt = null,
-        IEnumerable<DiffData>? diffDataEntries = null)
-    {
-        return new DiffResult
+    public static DiffResult Create(Guid baselineReportId, Guid currentReportId, DateTime? generatedAt = null, IEnumerable<DiffData>? diffDataEntries = null) =>
+        new DiffResult
         {
+            Id = Guid.NewGuid(),
+            CreatedAt = DateTime.UtcNow,
             BaselineReportId = baselineReportId,
             CurrentReportId = currentReportId,
             GeneratedAt = generatedAt ?? DateTime.UtcNow,
             DiffDataEntries = diffDataEntries ?? []
         };
-    }
 }

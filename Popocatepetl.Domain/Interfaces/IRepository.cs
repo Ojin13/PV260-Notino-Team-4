@@ -1,6 +1,8 @@
+using Popocatepetl.Domain.Entities;
+
 namespace Popocatepetl.Domain.Interfaces;
 
-public interface IRepository<T> where T : class
+public interface IRepository<T> where T : BaseEntity
 {
     Task<IEnumerable<T>> GetAllAsync();
     Task<T?> GetByIdAsync(Guid id);
