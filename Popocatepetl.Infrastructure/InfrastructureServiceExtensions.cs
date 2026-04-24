@@ -9,6 +9,7 @@ using Popocatepetl.Infrastructure.Export;
 using Popocatepetl.Infrastructure.Repositories;
 using QuestPDF.Infrastructure;
 using Resend;
+using Popocatepetl.Infrastructure.Services;
 
 namespace Popocatepetl.Infrastructure;
 
@@ -60,6 +61,12 @@ public static class InfrastructureServiceExtensions
 
         QuestPDF.Settings.License = LicenseType.Community;
         services.AddSingleton<IDiffExporter, DiffExporter>();
+        services.AddOptions<ArkReportOptions>()
+            .Bind(configuration.GetSection(ArkReportOptions.SectionName));
+        services.AddHttpClient<IArkReportClient, ArkReportClient>(client =>
+        {
+            client.Timeout = TimeSpan.FromSeconds(30);
+        });
 
         return services;
     }
