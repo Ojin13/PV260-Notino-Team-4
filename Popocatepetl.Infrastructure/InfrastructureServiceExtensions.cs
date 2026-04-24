@@ -4,7 +4,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Popocatepetl.Domain.Interfaces;
 using Popocatepetl.Infrastructure.Data;
 using Popocatepetl.Infrastructure.Data.Seeders;
+using Popocatepetl.Infrastructure.Email;
+using Popocatepetl.Infrastructure.Export;
 using Popocatepetl.Infrastructure.Repositories;
+using QuestPDF.Infrastructure;
+using Resend;
 
 namespace Popocatepetl.Infrastructure;
 
@@ -43,6 +47,19 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IDiffResultRepository, DiffResultRepository>();
         services.AddScoped<IDiffCalculator, DiffCalculator.DiffCalculator>();
         services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+
+        services.AddOptions<ResendOptions>()
+            .Bind(configuration.GetSection(ResendOptions.SectionName));
+        services.AddHttpClient<ResendClient>();
+        services.Configure<ResendClientOptions>(o =>
+        {
+            o.ApiToken = configuration[$"{ResendOptions.SectionName}:ApiKey"] ?? string.Empty;
+        });
+        services.AddTransient<IResend, ResendClient>();
+        services.AddScoped<IEmailService, ResendEmailService>();
+
+        QuestPDF.Settings.License = LicenseType.Community;
+        services.AddSingleton<IDiffExporter, DiffExporter>();
 
         return services;
     }
