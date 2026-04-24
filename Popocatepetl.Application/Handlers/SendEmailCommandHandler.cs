@@ -10,7 +10,7 @@ namespace Popocatepetl.Application.Handlers;
 
 /// <summary>Handles SendEmailCommand: fetches the latest diff, renders it, and emails it as an attachment.</summary>
 public sealed class SendEmailCommandHandler(
-    IDiffRepository diffRepository,
+    IDiffResultRepository diffResultRepository,
     IDiffExporter diffExporter,
     IEmailService emailService) : IRequestHandler<SendEmailCommand, Unit>
 {
@@ -29,11 +29,11 @@ public sealed class SendEmailCommandHandler(
             throw new ArgumentException(
                 $"Invalid email address(es): {string.Join(", ", invalid)}.", nameof(request));
 
-        var latest = await diffRepository.GetLatestAsync(cancellationToken)
+        var diff = await diffResultRepository.GetLastAsync()
             ?? throw new NotFoundException(nameof(DiffResult), "latest");
 
-        var attachment = BuildAttachment(latest, request.Format);
-        var timestamp = latest.Diff.GeneratedAt.ToString("yyyy-MM-dd HH:mm");
+        var attachment = BuildAttachment(diff, request.Format);
+        var timestamp = diff.GeneratedAt.ToString("yyyy-MM-dd HH:mm");
 
         await emailService.SendAsync(
             subject: $"ARKK holdings diff — {timestamp} UTC",
@@ -44,18 +44,18 @@ public sealed class SendEmailCommandHandler(
         return Unit.Value;
     }
 
-    private MailAttachment BuildAttachment(LatestDiff latest, DiffExportFormat format)
+    private MailAttachment BuildAttachment(DiffResult diff, DiffExportFormat format)
     {
-        var date = latest.Diff.GeneratedAt.ToString("yyyyMMdd");
+        var date = diff.GeneratedAt.ToString("yyyyMMdd");
         return format switch
         {
             DiffExportFormat.Csv => new MailAttachment(
                 FileName: $"ARKK_diff_{date}.csv",
-                Content: diffExporter.ToCsv(latest.Diff, latest.Rows),
+                Content: diffExporter.ToCsv(diff, diff.DiffDataEntries),
                 ContentType: "text/csv"),
             DiffExportFormat.Pdf => new MailAttachment(
                 FileName: $"ARKK_diff_{date}.pdf",
-                Content: diffExporter.ToPdf(latest.Diff, latest.Rows),
+                Content: diffExporter.ToPdf(diff, diff.DiffDataEntries),
                 ContentType: "application/pdf"),
             _ => throw new ArgumentOutOfRangeException(nameof(format), format, "Unsupported export format."),
         };

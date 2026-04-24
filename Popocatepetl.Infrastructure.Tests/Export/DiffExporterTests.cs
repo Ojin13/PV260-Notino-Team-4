@@ -15,19 +15,15 @@ public class DiffExporterTests
 
     private readonly DiffExporter _sut = new();
 
-    private static readonly DiffResult Diff = new()
-    {
-        BaselineReportId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-        CurrentReportId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-        GeneratedAt = new DateTime(2026, 04, 23, 10, 0, 0, DateTimeKind.Utc),
-    };
+    private static readonly DiffResult Diff = DiffResult.Create(
+        baselineReportId: Guid.Parse("11111111-1111-1111-1111-111111111111"),
+        currentReportId: Guid.Parse("22222222-2222-2222-2222-222222222222"),
+        generatedAt: new DateTime(2026, 04, 23, 10, 0, 0, DateTimeKind.Utc));
 
     private static readonly List<DiffData> Rows =
     [
-        new() { Id = Guid.NewGuid(), Name = "Tesla Inc", Ticker = "TSLA", Shares = 1_000_000,
-                SharesDiffPercent = 2.5, ShareDiffType = ShareDiffType.Increased, WeightPercent = 9.87 },
-        new() { Id = Guid.NewGuid(), Name = "Roku Inc", Ticker = "ROKU", Shares = 500_000,
-                SharesDiffPercent = -1.3, ShareDiffType = ShareDiffType.Decreased, WeightPercent = 3.45 },
+        DiffData.Create("Tesla Inc", "TSLA", 1_000_000, 2.5, ShareDiffType.Increased, 9.87),
+        DiffData.Create("Roku Inc", "ROKU", 500_000, -1.3, ShareDiffType.Decreased, 3.45),
     ];
 
     [Fact]

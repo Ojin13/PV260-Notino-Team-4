@@ -61,9 +61,6 @@ public static class InfrastructureServiceExtensions
         QuestPDF.Settings.License = LicenseType.Community;
         services.AddSingleton<IDiffExporter, DiffExporter>();
 
-        // TODO: replace with a DB-backed IDiffRepository when its ready to go
-        services.AddSingleton<IDiffRepository, StubDiffRepository>();
-
         return services;
     }
 }

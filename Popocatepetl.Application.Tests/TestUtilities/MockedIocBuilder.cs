@@ -27,9 +27,9 @@ public class MockedIocBuilder
         return this;
     }
 
-    public MockedIocBuilder AddMockedDiffRepository(out Mock<IDiffRepository> mock)
+    public MockedIocBuilder AddMockedDiffResultRepository(out Mock<IDiffResultRepository> mock)
     {
-        mock = new Mock<IDiffRepository>();
+        mock = new Mock<IDiffResultRepository>();
         _serviceCollection.AddSingleton(mock.Object);
         return this;
     }

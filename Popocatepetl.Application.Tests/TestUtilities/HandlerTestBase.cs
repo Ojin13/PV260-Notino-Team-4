@@ -10,7 +10,7 @@ public abstract class HandlerTestBase : IDisposable
 
     protected IMediator Mediator { get; }
     protected Mock<IEmailService> EmailService { get; }
-    protected Mock<IDiffRepository> DiffRepository { get; }
+    protected Mock<IDiffResultRepository> DiffResultRepository { get; }
     protected Mock<IDiffExporter> DiffExporter { get; }
 
     protected HandlerTestBase()
@@ -18,14 +18,14 @@ public abstract class HandlerTestBase : IDisposable
         var builder = new MockedIocBuilder();
         builder
             .AddMockedEmailService(out var emailService)
-            .AddMockedDiffRepository(out var diffRepository)
+            .AddMockedDiffResultRepository(out var diffResultRepository)
             .AddMockedDiffExporter(out var diffExporter)
             .AddMediatR(typeof(DependencyInjection).Assembly);
 
         _serviceProvider = builder.Build();
         Mediator = _serviceProvider.GetRequiredService<IMediator>();
         EmailService = emailService;
-        DiffRepository = diffRepository;
+        DiffResultRepository = diffResultRepository;
         DiffExporter = diffExporter;
     }
 
