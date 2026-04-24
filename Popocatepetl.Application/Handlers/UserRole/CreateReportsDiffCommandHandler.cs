@@ -22,7 +22,7 @@ public sealed class CreateReportsDiffCommandHandler(
 
         var diffResult = diffCalculator.Calculate(baseline, current);
 
-        await diffResultRepository.CreateAsync(diffResult);
+        await diffResultRepository.AddAsync(diffResult);
         return Unit.Value;
     }
 }
