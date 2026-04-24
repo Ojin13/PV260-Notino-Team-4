@@ -14,11 +14,11 @@ public sealed class CreateReportsDiffCommandHandler(
 {
     public async Task<Unit> Handle(CreateReportsDiffCommand request, CancellationToken cancellationToken)
     {
-        var baseline = await reportRepository.GetByIdAsync(request.baselineReportId)
-            ?? throw new NotFoundException(nameof(Report), request.baselineReportId);
+        var baseline = await reportRepository.GetByIdAsync(request.BaselineReportId)
+            ?? throw new NotFoundException(nameof(Report), request.BaselineReportId);
 
-        var current = await reportRepository.GetByIdAsync(request.currentReportId)
-            ?? throw new NotFoundException(nameof(Report), request.currentReportId);
+        var current = await reportRepository.GetByIdAsync(request.CurrentReportId)
+            ?? throw new NotFoundException(nameof(Report), request.CurrentReportId);
 
         var diffResult = diffCalculator.Calculate(baseline, current);
 
