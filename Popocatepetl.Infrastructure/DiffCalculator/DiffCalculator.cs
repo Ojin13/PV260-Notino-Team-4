@@ -1,11 +1,11 @@
+using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Popocatepetl.Domain.Entities;
 using Popocatepetl.Domain.Enums;
 using Popocatepetl.Domain.Interfaces;
-using System.Globalization;
 
-namespace Popocatepetl.Infrastructure.Repositories;
+namespace Popocatepetl.Infrastructure.DiffCalculator;
 
 /// <summary>Calculates report diffs from CSV report content using CsvHelper.</summary>
 public sealed class DiffCalculator : IDiffCalculator
