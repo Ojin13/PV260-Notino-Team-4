@@ -143,14 +143,14 @@ public sealed class DiffCalculator : IDiffCalculator
     {
         public ReportRowCsvMap()
         {
-            Map(x => x.Date).Name("date");
-            Map(x => x.Fund).Name("fund");
-            Map(x => x.Company).Name("company");
-            Map(x => x.Ticker).Name("ticker");
-            Map(x => x.Cusip).Name("cusip");
-            Map(x => x.Shares).Name("shares");
-            Map(x => x.MarketValueUsd).Name("market value ($)");
-            Map(x => x.WeightPercent).Name("weight (%)");
+            Map(x => x.Date).Name("date", "Date").Optional();
+            Map(x => x.Fund).Name("fund", "Fund").Optional();
+            Map(x => x.Company).Name("company", "Company", "name", "Name");
+            Map(x => x.Ticker).Name("ticker", "Ticker").Optional();
+            Map(x => x.Cusip).Name("cusip", "Cusip", "CUSIP").Optional();
+            Map(x => x.Shares).Name("shares", "Shares");
+            Map(x => x.MarketValueUsd).Name("market value ($)", "MarketValueUsd", "Market Value USD").Optional();
+            Map(x => x.WeightPercent).Name("weight (%)", "WeightPercent", "Weight Percent");
         }
     }
 
