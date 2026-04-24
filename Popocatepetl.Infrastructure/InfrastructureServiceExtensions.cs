@@ -39,7 +39,9 @@ public static class InfrastructureServiceExtensions
                 }));
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IReportRepository, ReportRepository>();
         services.AddScoped<IDiffResultRepository, DiffResultRepository>();
+        services.AddScoped<IDiffCalculator, DiffCalculator.DiffCalculator>();
         services.AddScoped<IAuditLogRepository, AuditLogRepository>();
 
         return services;

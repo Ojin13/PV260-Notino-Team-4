@@ -6,7 +6,7 @@ public class DiffResult : BaseEntity
     public Guid CurrentReportId { get; init; }
     public Report BaselineReport { get; init; } = null!;
     public Report CurrentReport { get; init; } = null!;
-    public IEnumerable<DiffData> DiffDataEntries { get; init; } = [];
+    public ICollection<DiffData> DiffDataEntries { get; init; } = new List<DiffData>();
     public DateTime GeneratedAt { get; init; }
 
     private DiffResult() { }
@@ -19,6 +19,6 @@ public class DiffResult : BaseEntity
             BaselineReportId = baselineReportId,
             CurrentReportId = currentReportId,
             GeneratedAt = generatedAt ?? DateTime.UtcNow,
-            DiffDataEntries = diffDataEntries ?? []
+            DiffDataEntries = diffDataEntries is null ? new List<DiffData>() : new List<DiffData>(diffDataEntries)
         };
 }
