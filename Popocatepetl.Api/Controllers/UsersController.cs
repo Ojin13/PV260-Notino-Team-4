@@ -48,12 +48,13 @@ public sealed class UsersController(ISender sender) : ControllerBase
     /// <summary>Deletes the user with the specified ID.</summary>
     [HttpDelete("{id:guid}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> Delete(Guid id, CancellationToken ct)
+    public async Task<IActionResult> Delete(Guid id, [FromBody] DeleteUserRequest request, CancellationToken ct)
     {
-        await sender.Send(new DeleteUserCommand(id), ct);
+        await sender.Send(new DeleteUserCommand(id, request.Email), ct);
         return NoContent();
     }
 }
 
 public record CreateUserRequest(string Email);
 public record UpdateUserRequest(string Email);
+public record DeleteUserRequest(string Email);

@@ -17,7 +17,7 @@ public sealed class AuditLoggingBehavior<TRequest, TResponse>(
         {
             var response = await next();
             await auditLogRepository.AddAsync(
-                AuditLog.Create(currentUser.Email, request.ActionName, DateTime.UtcNow, true, null));
+                AuditLog.Create(request.Email, request.ActionName, DateTime.UtcNow, true, request.Detail));
             return response;
         }
         catch (Exception ex)
