@@ -1,7 +1,10 @@
 using MediatR;
+using Popocatepetl.Application.Common;
 using Popocatepetl.Domain.Entities;
 
 namespace Popocatepetl.Application.Commands;
 
-/// <summary>Creates a new user with the given Email.</summary>
-public record CreateUserCommand(string Email) : IRequest<AppUser>;
+public record CreateUserCommand(string Email) : IRequest<AppUser>, IAuditableRequest
+{
+    public string ActionName => "CreateUser";
+}

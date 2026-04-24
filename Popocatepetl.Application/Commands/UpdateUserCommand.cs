@@ -1,6 +1,9 @@
 using MediatR;
+using Popocatepetl.Application.Common;
 
 namespace Popocatepetl.Application.Commands;
 
-/// <summary>Updates the email of the user identified by Id.</summary>
-public record UpdateUserCommand(Guid Id, string Email) : IRequest;
+public record UpdateUserCommand(Guid Id, string Email) : IRequest, IAuditableRequest
+{
+    public string ActionName => "UpdateUser";
+}

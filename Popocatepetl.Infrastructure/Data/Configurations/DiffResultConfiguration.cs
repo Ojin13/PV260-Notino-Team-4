@@ -4,11 +4,11 @@ using Popocatepetl.Domain.Entities;
 
 namespace Popocatepetl.Infrastructure.Data.Configurations;
 
-public sealed class DiffResultConfiguration : IEntityTypeConfiguration<DiffResult>
+public sealed class DiffResultConfiguration : BaseEntityConfiguration<DiffResult>
 {
-    public void Configure(EntityTypeBuilder<DiffResult> builder)
+    public override void Configure(EntityTypeBuilder<DiffResult> builder)
     {
-        builder.HasNoKey();
+        base.Configure(builder);
 
         builder.Property(x => x.BaselineReportId)
             .IsRequired();
@@ -19,6 +19,16 @@ public sealed class DiffResultConfiguration : IEntityTypeConfiguration<DiffResul
         builder.Property(x => x.GeneratedAt)
             .IsRequired();
 
-        builder.Ignore(x => x.DiffResults);
+        builder.HasOne(x => x.BaselineReport)
+            .WithMany()
+            .HasForeignKey(x => x.BaselineReportId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasOne(x => x.CurrentReport)
+            .WithMany()
+            .HasForeignKey(x => x.CurrentReportId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Ignore(x => x.DiffDataEntries);
     }
 }

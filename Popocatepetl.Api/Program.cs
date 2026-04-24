@@ -9,7 +9,6 @@ using Popocatepetl.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ── MVC + Swagger ─────────────────────────────────────────────────────────────
 builder.Services
     .AddControllers()
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
@@ -18,7 +17,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title   = "Popocatepetl API (dev/testing)",
+        Title = "Popocatepetl API (dev/testing)",
         Version = "v1",
         Description = """
             This is a temporary testing interface.
@@ -32,17 +31,17 @@ builder.Services.AddSwaggerGen(options =>
     // Make both identity headers appear as lock icons on every endpoint.
     options.AddSecurityDefinition("EmailHeader", new OpenApiSecurityScheme
     {
-        Name        = "X-User-Email",
-        Type        = SecuritySchemeType.ApiKey,
-        In          = ParameterLocation.Header,
+        Name = "X-User-Email",
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
         Description = "Set your email address for audit logging",
     });
 
     options.AddSecurityDefinition("RoleHeader", new OpenApiSecurityScheme
     {
-        Name        = "X-User-Role",
-        Type        = SecuritySchemeType.ApiKey,
-        In          = ParameterLocation.Header,
+        Name = "X-User-Role",
+        Type = SecuritySchemeType.ApiKey,
+        In = ParameterLocation.Header,
         Description = "Set role: Admin, PowerUser, or User",
     });
 
@@ -72,25 +71,16 @@ builder.Services.AddSwaggerGen(options =>
         },
     });
 
-    // Include XML doc comments from this assembly in Swagger UI.
-    var xmlFile = $"{typeof(Program).Assembly.GetName().Name}.xml";
-    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-    if (File.Exists(xmlPath))
-        options.IncludeXmlComments(xmlPath);
 });
 
-// ── Application services ──────────────────────────────────────────────────────
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-// ICurrentUserContext reads X-User-Email / X-User-Role from each incoming request.
 builder.Services.AddScoped<ICurrentUserContext, HttpCurrentUserContext>();
 
-// ── Build ─────────────────────────────────────────────────────────────────────
 var app = builder.Build();
 
-// Ensure the SQLite schema exists on first run.
 await using (var scope = app.Services.CreateAsyncScope())
 {
     try
@@ -101,11 +91,11 @@ await using (var scope = app.Services.CreateAsyncScope())
     catch (Exception ex)
     {
         var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogWarning(ex, "Database migration or seeding skipped (database may not be available).");
+        logger.LogWarning(ex, "Database migration skipped (database may not be available).");
     }
 }
 
-// ── Middleware pipeline ───────────────────────────────────────────────────────
+// Middleware pipeline
 app.UseSwagger();
 app.UseSwaggerUI(ui =>
 {
