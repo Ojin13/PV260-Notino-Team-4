@@ -5,8 +5,7 @@ namespace Popocatepetl.Application.Commands;
 
 public record CreateReportsDiffCommand(
     Guid BaselineReportId,
-    Guid CurrentReportId,
-    string Email
+    Guid CurrentReportId
 ) : IAuditableRequest, IRequest<Unit>
 {
     public string ActionName => "CreateReportsDiff";

@@ -22,10 +22,10 @@ namespace Popocatepetl.Api.Controllers
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public async Task<IActionResult> CreateDiffReport([FromBody] CreateReportsDiffRequest request, CancellationToken ct)
         {
-            await sender.Send(new CreateReportsDiffCommand(request.BaselineReportId, request.CurrentReportId, request.Email), ct);
+            await sender.Send(new CreateReportsDiffCommand(request.BaselineReportId, request.CurrentReportId), ct);
             return NoContent();
         }
     }
 
-    public record CreateReportsDiffRequest(Guid BaselineReportId, Guid CurrentReportId, string Email);
+    public record CreateReportsDiffRequest(Guid BaselineReportId, Guid CurrentReportId);
 }
