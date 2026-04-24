@@ -9,6 +9,7 @@ public sealed class DiffResultRepository(PopocatepetlDbContext context) : Reposi
 {
     public async Task<DiffResult?> GetLastAsync() =>
         await Context.DiffResults
+            .Include(x => x.DiffDataEntries)
             .AsNoTracking()
             .OrderByDescending(d => d.GeneratedAt)
             .FirstOrDefaultAsync();
