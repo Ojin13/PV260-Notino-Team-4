@@ -1,21 +1,16 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Popocatepetl.Domain.Entities;
 
 namespace Popocatepetl.Infrastructure.Data.Configurations;
 
-/// <summary>EF Core entity configuration for AppUser.</summary>
-internal sealed class AppUserConfiguration : IEntityTypeConfiguration<AppUser>
+internal sealed class AppUserConfiguration : BaseEntityConfiguration<AppUser>
 {
-    public void Configure(EntityTypeBuilder<AppUser> builder)
+    public override void Configure(EntityTypeBuilder<AppUser> builder)
     {
-        builder.HasKey(u => u.Id);
+        base.Configure(builder);
 
         builder.Property(u => u.Email)
             .IsRequired()
             .HasMaxLength(300);
-
-        builder.Property(u => u.CreatedAt)
-            .IsRequired();
     }
 }

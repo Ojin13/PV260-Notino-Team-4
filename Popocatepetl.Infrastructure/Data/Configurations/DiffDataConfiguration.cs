@@ -1,14 +1,13 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Popocatepetl.Domain.Entities;
 
 namespace Popocatepetl.Infrastructure.Data.Configurations;
 
-public sealed class DiffDataConfiguration : IEntityTypeConfiguration<DiffData>
+public sealed class DiffDataConfiguration : BaseEntityConfiguration<DiffData>
 {
-    public void Configure(EntityTypeBuilder<DiffData> builder)
+    public override void Configure(EntityTypeBuilder<DiffData> builder)
     {
-        builder.HasKey(x => x.Id);
+        base.Configure(builder);
 
         builder.Property(x => x.Name)
             .IsRequired()

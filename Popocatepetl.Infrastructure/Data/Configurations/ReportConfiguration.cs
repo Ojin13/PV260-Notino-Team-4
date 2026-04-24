@@ -1,14 +1,13 @@
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Popocatepetl.Domain.Entities;
 
 namespace Popocatepetl.Infrastructure.Data.Configurations;
 
-public sealed class ReportConfiguration : IEntityTypeConfiguration<Report>
+public sealed class ReportConfiguration : BaseEntityConfiguration<Report>
 {
-    public void Configure(EntityTypeBuilder<Report> builder)
+    public override void Configure(EntityTypeBuilder<Report> builder)
     {
-        builder.HasKey(x => x.Id);
+        base.Configure(builder);
 
         builder.Property(x => x.FileName)
             .IsRequired()

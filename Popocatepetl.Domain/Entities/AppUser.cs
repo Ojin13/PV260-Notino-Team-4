@@ -1,31 +1,16 @@
 namespace Popocatepetl.Domain.Entities;
 
-/// <summary>Represents a registered user of the application.</summary>
-public class AppUser
+public class AppUser : BaseEntity
 {
-    /// <summary>Unique identifier for the user.</summary>
-    public Guid Id { get; init; }
-
-    /// <summary>The user's email address.</summary>
     public string Email { get; set; } = string.Empty;
 
-    /// <summary>When the user account was created.</summary>
-    public DateTime CreatedAt { get; init; }
+    private AppUser() { }
 
-    private AppUser()
-    {
-    }
-
-    public static AppUser Create(
-        string email,
-        DateTime? createdAt = null,
-        Guid? id = null)
-    {
-        return new AppUser
+    public static AppUser Create(string email, DateTime? createdAt = null, Guid? id = null) =>
+        new AppUser
         {
             Id = id ?? Guid.NewGuid(),
-            Email = email,
-            CreatedAt = createdAt ?? DateTime.UtcNow
+            CreatedAt = createdAt ?? DateTime.UtcNow,
+            Email = email
         };
-    }
 }

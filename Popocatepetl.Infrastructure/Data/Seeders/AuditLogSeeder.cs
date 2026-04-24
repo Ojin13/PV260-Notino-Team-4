@@ -34,11 +34,11 @@ public static class AuditLogSeeder
                 x.OccurredAt == seed.OccuredAt);
             if (exists)
                 continue;
-            
+
             var log = AuditLog.Create(seed.UserEmail, seed.Action, seed.OccuredAt, seed.WasSuccessful, seed.Details);
             dbContext.AuditLogs.Add(log);
         }
-        
+
         await dbContext.SaveChangesAsync();
     }
 
