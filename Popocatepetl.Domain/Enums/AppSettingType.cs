@@ -2,5 +2,6 @@ namespace Popocatepetl.Domain.Enums;
 
 public enum AppSettingType
 {
-    ColorScheme
+    ColorScheme,
+    Language,
 }

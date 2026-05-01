@@ -48,6 +48,7 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IDiffResultRepository, DiffResultRepository>();
         services.AddScoped<IDiffCalculator, DiffCalculator.DiffCalculator>();
         services.AddScoped<IAuditLogRepository, AuditLogRepository>();
+        services.AddScoped<IAppSettingRepository, AppSettingRepository>();
 
         services.AddOptions<ResendOptions>()
             .Bind(configuration.GetSection(ResendOptions.SectionName));

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e105</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e105</value>
+  </resheader>
+  <data name="auth.email.prompt" xml:space="preserve"><value>E-mail</value></data>
+  <data name="auth.email.empty" xml:space="preserve"><value>E-mail nesmí být prázdný.</value></data>
+  <data name="auth.email.invalid" xml:space="preserve"><value>Neplatná e-mailová adresa.</value></data>
+  <data name="auth.admin.password.prompt" xml:space="preserve"><value>Administrátorské heslo</value></data>
+  <data name="auth.admin.password.invalid" xml:space="preserve"><value>Nesprávné heslo.</value></data>
+  <data name="menu.top.title" xml:space="preserve"><value>Hlavní menu</value></data>
+  <data name="menu.role.select" xml:space="preserve"><value>Vybrat roli</value></data>
+  <data name="menu.role.title" xml:space="preserve"><value>Role</value></data>
+  <data name="menu.role.user" xml:space="preserve"><value>Běžný uživatel</value></data>
+  <data name="menu.role.poweruser" xml:space="preserve"><value>Pokročilý uživatel</value></data>
+  <data name="menu.role.admin" xml:space="preserve"><value>Administrátor</value></data>
+  <data name="menu.user.title" xml:space="preserve"><value>Uživatel</value></data>
+  <data name="menu.user.diff.view" xml:space="preserve"><value>Zobrazit poslední diff</value></data>
+  <data name="menu.poweruser.title" xml:space="preserve"><value>Pokročilý uživatel</value></data>
+  <data name="menu.poweruser.theme.change" xml:space="preserve"><value>Změnit barevné schéma</value></data>
+  <data name="menu.poweruser.send" xml:space="preserve"><value>Odeslat report e-mailem</value></data>
+  <data name="menu.admin.title" xml:space="preserve"><value>Administrátor</value></data>
+  <data name="menu.admin.download" xml:space="preserve"><value>Stáhnout nový report</value></data>
+  <data name="menu.admin.export" xml:space="preserve"><value>Exportovat diff</value></data>
+  <data name="menu.admin.export.path" xml:space="preserve"><value>Cílová cesta (prázdné = výchozí)</value></data>
+  <data name="menu.admin.export.path.default" xml:space="preserve"><value>Výchozí: {0}</value></data>
+  <data name="menu.admin.export.overwrite" xml:space="preserve"><value>Přepsat?</value></data>
+  <data name="menu.admin.export.overwrite.exists" xml:space="preserve"><value>Soubor již existuje: {0}</value></data>
+  <data name="menu.admin.export.dialog.title" xml:space="preserve"><value>Uložit export jako</value></data>
+  <data name="menu.admin.download.dialog.title" xml:space="preserve"><value>Uložit stažený report jako</value></data>
+  <data name="menu.admin.download.savecopy.prompt" xml:space="preserve"><value>Uložit lokální kopii staženého CSV?</value></data>
+  <data name="menu.admin.download.path" xml:space="preserve"><value>Cílová cesta (prázdné = výchozí)</value></data>
+  <data name="menu.poweruser.send.invalid" xml:space="preserve"><value>Neplatná e-mailová adresa: {0}</value></data>
+  <data name="menu.poweruser.send.empty" xml:space="preserve"><value>Je potřeba alespoň jeden příjemce.</value></data>
+  <data name="menu.poweruser.send.too-many" xml:space="preserve"><value>Příliš mnoho příjemců (max 100).</value></data>
+  <data name="menu.admin.auditlogs" xml:space="preserve"><value>Zobrazit audit log</value></data>
+  <data name="menu.language.change" xml:space="preserve"><value>Změnit jazyk aplikace</value></data>
+  <data name="menu.language.title" xml:space="preserve"><value>Jazyk</value></data>
+  <data name="menu.back" xml:space="preserve"><value>← Zpět</value></data>
+  <data name="menu.exit" xml:space="preserve"><value>Konec</value></data>
+  <data name="status.downloading" xml:space="preserve"><value>Stahování reportu…</value></data>
+  <data name="status.sending" xml:space="preserve"><value>Odesílání e-mailu…</value></data>
+  <data name="status.exporting" xml:space="preserve"><value>Zápis exportu…</value></data>
+  <data name="prompt.continue" xml:space="preserve"><value>Stiskněte libovolnou klávesu pro pokračování…</value></data>
+</root>
