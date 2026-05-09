@@ -7,10 +7,12 @@ using Popocatepetl.Domain.Interfaces;
 
 namespace Popocatepetl.Application.Handlers.Reports;
 
-/// <summary>Stores the latest ARK report for an admin user.</summary>
+/// <summary>Stores the latest ARK report for an admin user and recalculates the diff if a baseline exists.</summary>
 public sealed class DownloadLatestArkReportCommandHandler(
     IArkReportClient arkReportClient,
     IReportRepository reportRepository,
+    IDiffResultRepository diffResultRepository,
+    IDiffCalculator diffCalculator,
     ICurrentUserContext currentUserContext)
     : IRequestHandler<DownloadLatestArkReportCommand, Result<DownloadLatestArkReportResponse>>
 {
@@ -37,6 +39,12 @@ public sealed class DownloadLatestArkReportCommandHandler(
 
             await reportRepository.SaveAsync(report);
             await reportRepository.SetLatestAsync(report.Id);
+
+            if (previousLatest is not null)
+            {
+                var diff = diffCalculator.Calculate(previousLatest, report);
+                await diffResultRepository.AddAsync(diff);
+            }
 
             return Result<DownloadLatestArkReportResponse>.Success(new DownloadLatestArkReportResponse(
                 report.Id,

@@ -68,9 +68,13 @@ public sealed class DownloadReportAction : IMenuAction
             $"[{palette.Success}]✓[/] [{palette.Highlight}]{Markup.Escape(r.FileName)}[/] " +
             $"[{palette.Muted}]({r.UploadedAt:u}, id={r.ReportId})[/]");
 
-        if (!r.PreviousReportFound)
+        if (r.PreviousReportFound)
         {
-            _console.MarkupLine($"[{palette.Warning}](no previous report — diff not recalculated)[/]");
+            _console.MarkupLine($"[{palette.Success}]✓ diff recalculated against previous report[/]");
+        }
+        else
+        {
+            _console.MarkupLine($"[{palette.Warning}](no previous report — diff will appear after a second download)[/]");
         }
 
         if (await _confirm.AskAsync("menu.admin.download.savecopy.prompt", defaultValue: false, ct))
