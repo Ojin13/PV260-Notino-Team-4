@@ -23,6 +23,9 @@ public static class InfrastructureServiceExtensions
         var dbPath = configuration["Database:Path"]
             ?? throw new InvalidOperationException("Missing configuration key 'Database:Path'.");
 
+        if (!Path.IsPathFullyQualified(dbPath))
+            dbPath = Path.Combine(AppContext.BaseDirectory, dbPath);
+
         services.AddDbContext<PopocatepetlDbContext>(options =>
             options
                 .UseSqlite($"Data Source={dbPath}")
