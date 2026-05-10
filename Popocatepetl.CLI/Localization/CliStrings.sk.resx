@@ -50,5 +50,6 @@
   <data name="status.downloading" xml:space="preserve"><value>Sťahovanie reportu…</value></data>
   <data name="status.sending" xml:space="preserve"><value>Odosielanie e-mailu…</value></data>
   <data name="status.exporting" xml:space="preserve"><value>Zápis exportu…</value></data>
+  <data name="diff.identical" xml:space="preserve"><value>Posledný a predchádzajúci report sú totožné.</value></data>
   <data name="prompt.continue" xml:space="preserve"><value>Stlačte ľubovoľnú klávesu pre pokračovanie…</value></data>
 </root>

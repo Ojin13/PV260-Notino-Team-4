@@ -62,6 +62,7 @@
   <data name="language.cs" xml:space="preserve"><value>Čeština</value></data>
   <data name="language.sk" xml:space="preserve"><value>Slovenčina</value></data>
   <data name="diff.empty" xml:space="preserve"><value>No diff available yet.</value></data>
+  <data name="diff.identical" xml:space="preserve"><value>Latest and previous reports are identical.</value></data>
   <data name="audit.empty" xml:space="preserve"><value>No audit logs available.</value></data>
   <data name="status.downloading" xml:space="preserve"><value>Downloading latest report…</value></data>
   <data name="status.sending" xml:space="preserve"><value>Sending email…</value></data>
