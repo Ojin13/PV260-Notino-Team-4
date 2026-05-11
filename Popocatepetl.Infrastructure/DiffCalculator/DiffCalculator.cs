@@ -6,7 +6,6 @@ using Popocatepetl.Domain.Interfaces;
 
 namespace Popocatepetl.Infrastructure.DiffCalculator;
 
-/// <summary>Parses CSV report content and delegates diff calculation to the domain model.</summary>
 public sealed class DiffCalculator : IDiffCalculator
 {
     public DiffResult Calculate(Report baseline, Report current)
