@@ -21,6 +21,7 @@ public sealed class ExportDiffAction : IMenuAction
     private readonly IStringLocalizer<CliStrings> _loc;
     private readonly ThemeApplier _theme;
     private readonly MenuChrome _chrome;
+    private readonly LocaleState _locale;
 
     public ExportDiffAction(
         ISelectPrompt select,
@@ -32,7 +33,8 @@ public sealed class ExportDiffAction : IMenuAction
         IAnsiConsole console,
         IStringLocalizer<CliStrings> loc,
         ThemeApplier theme,
-        MenuChrome chrome)
+        MenuChrome chrome,
+        LocaleState locale)
     {
         _select = select;
         _text = text;
@@ -44,6 +46,7 @@ public sealed class ExportDiffAction : IMenuAction
         _loc = loc;
         _theme = theme;
         _chrome = chrome;
+        _locale = locale;
     }
 
     public string LabelKey => "menu.admin.export";
@@ -53,6 +56,7 @@ public sealed class ExportDiffAction : IMenuAction
         var palette = _theme.Active;
 
         var diff = await _diffRepo.GetLastAsync();
+        _locale.AlignCurrentThread();
         if (diff is null)
         {
             _console.MarkupLine($"[{palette.Muted}]{Markup.Escape(_loc["diff.empty"].Value)}[/]");
@@ -73,7 +77,7 @@ public sealed class ExportDiffAction : IMenuAction
         var targetPath = await ResolveTargetPathAsync(_loc["menu.admin.export.dialog.title"].Value, defaultName, palette, ct);
         if (targetPath is null)
         {
-            _console.MarkupLine($"[{palette.Muted}]cancelled[/]");
+            _console.MarkupLine($"[{palette.Muted}]{Markup.Escape(_loc["status.cancelled"].Value)}[/]");
             _chrome.WaitForContinue();
             return;
         }
@@ -98,7 +102,7 @@ public sealed class ExportDiffAction : IMenuAction
         }
         catch (Exception ex)
         {
-            _console.MarkupLine($"[{palette.Error}]export failed: {Markup.Escape(ex.Message)}[/]");
+            _console.MarkupLine($"[{palette.Error}]{Markup.Escape(_loc["error.export", ex.Message].Value)}[/]");
         }
         _chrome.WaitForContinue();
     }

@@ -51,4 +51,55 @@
   <data name="status.sending" xml:space="preserve"><value>Odosielanie e-mailu…</value></data>
   <data name="status.exporting" xml:space="preserve"><value>Zápis exportu…</value></data>
   <data name="prompt.continue" xml:space="preserve"><value>Stlačte ľubovoľnú klávesu pre pokračovanie…</value></data>
+  <data name="menu.poweruser.theme.title" xml:space="preserve"><value>Farebná schéma</value></data>
+  <data name="menu.poweruser.send.recipients" xml:space="preserve"><value>Príjemcovia (oddelení čiarkou alebo bodkočiarkou, prázdne = storno)</value></data>
+  <data name="menu.poweruser.send.format" xml:space="preserve"><value>Formát prílohy</value></data>
+  <data name="menu.poweruser.send.confirm" xml:space="preserve"><value>Odoslať teraz?</value></data>
+  <data name="menu.admin.export.format" xml:space="preserve"><value>Formát exportu</value></data>
+  <data name="theme.default" xml:space="preserve"><value>Predvolené</value></data>
+  <data name="theme.high-contrast" xml:space="preserve"><value>Vysoký kontrast</value></data>
+  <data name="language.en" xml:space="preserve"><value>Angličtina</value></data>
+  <data name="diff.empty" xml:space="preserve"><value>Diff zatiaľ nie je k dispozícii.</value></data>
+  <data name="audit.empty" xml:space="preserve"><value>Žiadne záznamy auditu nie sú k dispozícii.</value></data>
+  <data name="diff.col.ticker" xml:space="preserve"><value>Ticker</value></data>
+  <data name="diff.col.name" xml:space="preserve"><value>Názov</value></data>
+  <data name="diff.col.shares" xml:space="preserve"><value>Akcie</value></data>
+  <data name="diff.col.delta" xml:space="preserve"><value>Δ %</value></data>
+  <data name="diff.col.type" xml:space="preserve"><value>Typ</value></data>
+  <data name="diff.col.weight" xml:space="preserve"><value>Váha %</value></data>
+  <data name="audit.col.timestamp" xml:space="preserve"><value>Čas</value></data>
+  <data name="audit.col.email" xml:space="preserve"><value>Email</value></data>
+  <data name="audit.col.action" xml:space="preserve"><value>Akcia</value></data>
+  <data name="audit.col.status" xml:space="preserve"><value>Stav</value></data>
+  <data name="audit.col.details" xml:space="preserve"><value>Podrobnosti</value></data>
+  <data name="audit.status.ok" xml:space="preserve"><value>ok</value></data>
+  <data name="audit.status.err" xml:space="preserve"><value>chyba</value></data>
+  <data name="audit.truncated" xml:space="preserve"><value>({0} starších záznamov vynechaných)</value></data>
+  <data name="theme.col.palette" xml:space="preserve"><value>Paleta</value></data>
+  <data name="theme.col.heading" xml:space="preserve"><value>Nadpis</value></data>
+  <data name="theme.col.highlight" xml:space="preserve"><value>Zvýraznenie</value></data>
+  <data name="theme.col.success" xml:space="preserve"><value>Úspech</value></data>
+  <data name="theme.col.warning" xml:space="preserve"><value>Varovanie</value></data>
+  <data name="theme.col.error" xml:space="preserve"><value>Chyba</value></data>
+  <data name="status.cancelled" xml:space="preserve"><value>Zrušené</value></data>
+  <data name="status.sent" xml:space="preserve"><value>Odoslané</value></data>
+  <data name="status.saved" xml:space="preserve"><value>Kópia uložená</value></data>
+  <data name="error.export" xml:space="preserve"><value>Chyba exportu: {0}</value></data>
+  <data name="error.save" xml:space="preserve"><value>Chyba uloženia: {0}</value></data>
+  <data name="error.send" xml:space="preserve"><value>Chyba odoslania: {0}</value></data>
+  <data name="error.generic" xml:space="preserve"><value>Chyba</value></data>
+  <data name="error.report.missing" xml:space="preserve"><value>Report zmizol z databázy</value></data>
+  <data name="status.diff.recalculated" xml:space="preserve"><value>Diff prepočítaný oproti predchádzajúcemu reportu</value></data>
+  <data name="status.diff.first" xml:space="preserve"><value>Žiadny predchádzajúci report — diff sa zobrazí po ďalšom stiahnutí</value></data>
+  <data name="send.recipients.summary" xml:space="preserve"><value>Príjemcovia ({0}, formát={1}):</value></data>
+  <data name="audit.action.ChangeTheme" xml:space="preserve"><value>Zmena témy</value></data>
+  <data name="audit.action.ChangeLanguage" xml:space="preserve"><value>Zmena jazyka</value></data>
+  <data name="audit.action.SendEmailReport" xml:space="preserve"><value>Odoslanie reportu e-mailom</value></data>
+  <data name="audit.action.DownloadLatestReport" xml:space="preserve"><value>Stiahnutie najnovšieho reportu</value></data>
+  <data name="audit.action.CreateReportsDiff" xml:space="preserve"><value>Výpočet rozdielov reportov</value></data>
+  <data name="audit.action.UpdateUser" xml:space="preserve"><value>Aktualizácia používateľa</value></data>
+  <data name="audit.action.CreateUser" xml:space="preserve"><value>Vytvorenie používateľa</value></data>
+  <data name="audit.action.DeleteUser" xml:space="preserve"><value>Vymazanie používateľa</value></data>
+  <data name="audit.detail.Palette" xml:space="preserve"><value>Paleta</value></data>
+  <data name="audit.detail.Locale" xml:space="preserve"><value>Jazyk</value></data>
 </root>

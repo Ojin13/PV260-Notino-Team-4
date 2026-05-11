@@ -67,4 +67,45 @@
   <data name="status.sending" xml:space="preserve"><value>Sending email…</value></data>
   <data name="status.exporting" xml:space="preserve"><value>Writing export…</value></data>
   <data name="prompt.continue" xml:space="preserve"><value>Press any key to continue…</value></data>
+  <data name="diff.col.ticker" xml:space="preserve"><value>Ticker</value></data>
+  <data name="diff.col.name" xml:space="preserve"><value>Name</value></data>
+  <data name="diff.col.shares" xml:space="preserve"><value>Shares</value></data>
+  <data name="diff.col.delta" xml:space="preserve"><value>Δ %</value></data>
+  <data name="diff.col.type" xml:space="preserve"><value>Type</value></data>
+  <data name="diff.col.weight" xml:space="preserve"><value>Weight %</value></data>
+  <data name="audit.col.timestamp" xml:space="preserve"><value>Timestamp</value></data>
+  <data name="audit.col.email" xml:space="preserve"><value>Email</value></data>
+  <data name="audit.col.action" xml:space="preserve"><value>Action</value></data>
+  <data name="audit.col.status" xml:space="preserve"><value>Status</value></data>
+  <data name="audit.col.details" xml:space="preserve"><value>Details</value></data>
+  <data name="audit.status.ok" xml:space="preserve"><value>ok</value></data>
+  <data name="audit.status.err" xml:space="preserve"><value>err</value></data>
+  <data name="audit.truncated" xml:space="preserve"><value>({0} older entries omitted)</value></data>
+  <data name="theme.col.palette" xml:space="preserve"><value>Palette</value></data>
+  <data name="theme.col.heading" xml:space="preserve"><value>Heading</value></data>
+  <data name="theme.col.highlight" xml:space="preserve"><value>Highlight</value></data>
+  <data name="theme.col.success" xml:space="preserve"><value>Success</value></data>
+  <data name="theme.col.warning" xml:space="preserve"><value>Warning</value></data>
+  <data name="theme.col.error" xml:space="preserve"><value>Error</value></data>
+  <data name="status.cancelled" xml:space="preserve"><value>Cancelled</value></data>
+  <data name="status.sent" xml:space="preserve"><value>Sent</value></data>
+  <data name="status.saved" xml:space="preserve"><value>Saved copy</value></data>
+  <data name="error.export" xml:space="preserve"><value>Export failed: {0}</value></data>
+  <data name="error.save" xml:space="preserve"><value>Save failed: {0}</value></data>
+  <data name="error.send" xml:space="preserve"><value>Send failed: {0}</value></data>
+  <data name="error.generic" xml:space="preserve"><value>Error</value></data>
+  <data name="error.report.missing" xml:space="preserve"><value>Report disappeared from database</value></data>
+  <data name="status.diff.recalculated" xml:space="preserve"><value>Diff recalculated against previous report</value></data>
+  <data name="status.diff.first" xml:space="preserve"><value>No previous report — diff will appear after a second download</value></data>
+  <data name="send.recipients.summary" xml:space="preserve"><value>Recipients ({0}, format={1}):</value></data>
+  <data name="audit.action.ChangeTheme" xml:space="preserve"><value>Change theme</value></data>
+  <data name="audit.action.ChangeLanguage" xml:space="preserve"><value>Change language</value></data>
+  <data name="audit.action.SendEmailReport" xml:space="preserve"><value>Send email report</value></data>
+  <data name="audit.action.DownloadLatestReport" xml:space="preserve"><value>Download latest report</value></data>
+  <data name="audit.action.CreateReportsDiff" xml:space="preserve"><value>Create reports diff</value></data>
+  <data name="audit.action.UpdateUser" xml:space="preserve"><value>Update user</value></data>
+  <data name="audit.action.CreateUser" xml:space="preserve"><value>Create user</value></data>
+  <data name="audit.action.DeleteUser" xml:space="preserve"><value>Delete user</value></data>
+  <data name="audit.detail.Palette" xml:space="preserve"><value>Palette</value></data>
+  <data name="audit.detail.Locale" xml:space="preserve"><value>Locale</value></data>
 </root>

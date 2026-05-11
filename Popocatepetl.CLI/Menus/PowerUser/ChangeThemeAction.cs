@@ -71,12 +71,12 @@ public sealed class ChangeThemeAction : IMenuAction
         var table = new Table()
             .Border(TableBorder.Rounded)
             .BorderStyle(current.BorderStyle())
-            .AddColumn(new TableColumn(new Markup($"[{current.Heading}]Palette[/]")))
-            .AddColumn(new TableColumn(new Markup($"[{current.Heading}]Heading[/]")))
-            .AddColumn(new TableColumn(new Markup($"[{current.Heading}]Highlight[/]")))
-            .AddColumn(new TableColumn(new Markup($"[{current.Heading}]Success[/]")))
-            .AddColumn(new TableColumn(new Markup($"[{current.Heading}]Warning[/]")))
-            .AddColumn(new TableColumn(new Markup($"[{current.Heading}]Error[/]")));
+            .AddColumn(new TableColumn(new Markup($"[{current.Heading}]{Markup.Escape(_loc["theme.col.palette"].Value)}[/]")))
+            .AddColumn(new TableColumn(new Markup($"[{current.Heading}]{Markup.Escape(_loc["theme.col.heading"].Value)}[/]")))
+            .AddColumn(new TableColumn(new Markup($"[{current.Heading}]{Markup.Escape(_loc["theme.col.highlight"].Value)}[/]")))
+            .AddColumn(new TableColumn(new Markup($"[{current.Heading}]{Markup.Escape(_loc["theme.col.success"].Value)}[/]")))
+            .AddColumn(new TableColumn(new Markup($"[{current.Heading}]{Markup.Escape(_loc["theme.col.warning"].Value)}[/]")))
+            .AddColumn(new TableColumn(new Markup($"[{current.Heading}]{Markup.Escape(_loc["theme.col.error"].Value)}[/]")));
 
         foreach (var palette in BuiltInPalettes.All)
         {

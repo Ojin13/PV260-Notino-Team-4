@@ -58,7 +58,7 @@ public sealed class SendReportAction : IMenuAction
 
         if (string.IsNullOrWhiteSpace(raw))
         {
-            _console.MarkupLine($"[{palette.Muted}]cancelled[/]");
+            _console.MarkupLine($"[{palette.Muted}]{Markup.Escape(_loc["status.cancelled"].Value)}[/]");
             _chrome.WaitForContinue();
             return;
         }
@@ -75,7 +75,7 @@ public sealed class SendReportAction : IMenuAction
             ct);
 
         _console.MarkupLine(
-            $"[{palette.Heading}]Recipients ({recipients.Count}, format={format}):[/]");
+            $"[{palette.Heading}]{Markup.Escape(_loc["send.recipients.summary", recipients.Count, format].Value)}[/]");
         foreach (var r in recipients)
         {
             _console.MarkupLine($"  [{palette.Highlight}]•[/] {Markup.Escape(r)}");
@@ -83,7 +83,7 @@ public sealed class SendReportAction : IMenuAction
 
         if (!await _confirm.AskAsync("menu.poweruser.send.confirm", defaultValue: true, ct))
         {
-            _console.MarkupLine($"[{palette.Muted}]cancelled[/]");
+            _console.MarkupLine($"[{palette.Muted}]{Markup.Escape(_loc["status.cancelled"].Value)}[/]");
             _chrome.WaitForContinue();
             return;
         }
@@ -96,11 +96,11 @@ public sealed class SendReportAction : IMenuAction
                 .StartAsync(_loc["status.sending"].Value, async _ =>
                     await _sender.Send(new SendEmailCommand(recipients, format), ct));
 
-            _console.MarkupLine($"[{palette.Success}]✓ sent[/]");
+            _console.MarkupLine($"[{palette.Success}]✓ {Markup.Escape(_loc["status.sent"].Value)}[/]");
         }
         catch (Exception ex)
         {
-            _console.MarkupLine($"[{palette.Error}]send failed: {Markup.Escape(ex.Message)}[/]");
+            _console.MarkupLine($"[{palette.Error}]{Markup.Escape(_loc["error.send", ex.Message].Value)}[/]");
         }
         _chrome.WaitForContinue();
     }

@@ -21,6 +21,7 @@ public sealed class DownloadReportAction : IMenuAction
     private readonly IStringLocalizer<CliStrings> _loc;
     private readonly ThemeApplier _theme;
     private readonly MenuChrome _chrome;
+    private readonly LocaleState _locale;
 
     public DownloadReportAction(
         ISender sender,
@@ -31,7 +32,8 @@ public sealed class DownloadReportAction : IMenuAction
         IAnsiConsole console,
         IStringLocalizer<CliStrings> loc,
         ThemeApplier theme,
-        MenuChrome chrome)
+        MenuChrome chrome,
+        LocaleState locale)
     {
         _sender = sender;
         _reports = reports;
@@ -42,6 +44,7 @@ public sealed class DownloadReportAction : IMenuAction
         _loc = loc;
         _theme = theme;
         _chrome = chrome;
+        _locale = locale;
     }
 
     public string LabelKey => "menu.admin.download";
@@ -56,9 +59,10 @@ public sealed class DownloadReportAction : IMenuAction
             .StartAsync(_loc["status.downloading"].Value, async _ =>
                 await _sender.Send(new DownloadLatestArkReportCommand(), ct));
 
+        _locale.AlignCurrentThread();
         if (!result.IsSuccess)
         {
-            _console.MarkupLine($"[{palette.Error}]{Markup.Escape(result.ErrorMessage ?? "error")}[/]");
+            _console.MarkupLine($"[{palette.Error}]{Markup.Escape(result.ErrorMessage ?? _loc["error.generic"].Value)}[/]");
             _chrome.WaitForContinue();
             return;
         }
@@ -70,11 +74,11 @@ public sealed class DownloadReportAction : IMenuAction
 
         if (r.PreviousReportFound)
         {
-            _console.MarkupLine($"[{palette.Success}]✓ diff recalculated against previous report[/]");
+            _console.MarkupLine($"[{palette.Success}]✓ {Markup.Escape(_loc["status.diff.recalculated"].Value)}[/]");
         }
         else
         {
-            _console.MarkupLine($"[{palette.Warning}](no previous report — diff will appear after a second download)[/]");
+            _console.MarkupLine($"[{palette.Warning}]{Markup.Escape(_loc["status.diff.first"].Value)}[/]");
         }
 
         if (await _confirm.AskAsync("menu.admin.download.savecopy.prompt", defaultValue: false, ct))
@@ -87,6 +91,7 @@ public sealed class DownloadReportAction : IMenuAction
 
     private async Task SaveLocalCopyAsync(Guid reportId, string fileName, ThemePalette palette, CancellationToken ct)
     {
+        _locale.AlignCurrentThread();
         var title = _loc["menu.admin.download.dialog.title"].Value;
         string? path;
 
@@ -104,7 +109,7 @@ public sealed class DownloadReportAction : IMenuAction
 
         if (string.IsNullOrEmpty(path))
         {
-            _console.MarkupLine($"[{palette.Muted}]cancelled[/]");
+            _console.MarkupLine($"[{palette.Muted}]{Markup.Escape(_loc["status.cancelled"].Value)}[/]");
             return;
         }
 
@@ -113,16 +118,16 @@ public sealed class DownloadReportAction : IMenuAction
             var saved = await _reports.GetByIdAsync(reportId);
             if (saved is null)
             {
-                _console.MarkupLine($"[{palette.Error}]report disappeared from database[/]");
+                _console.MarkupLine($"[{palette.Error}]{Markup.Escape(_loc["error.report.missing"].Value)}[/]");
                 return;
             }
             await File.WriteAllTextAsync(path, saved.RawContent, ct);
             _console.MarkupLine(
-                $"[{palette.Success}]✓ saved copy →[/] [{palette.Highlight}]{Markup.Escape(Path.GetFullPath(path))}[/]");
+                $"[{palette.Success}]✓ {Markup.Escape(_loc["status.saved"].Value)} →[/] [{palette.Highlight}]{Markup.Escape(Path.GetFullPath(path))}[/]");
         }
         catch (Exception ex)
         {
-            _console.MarkupLine($"[{palette.Error}]save failed: {Markup.Escape(ex.Message)}[/]");
+            _console.MarkupLine($"[{palette.Error}]{Markup.Escape(_loc["error.save", ex.Message].Value)}[/]");
         }
     }
 }
