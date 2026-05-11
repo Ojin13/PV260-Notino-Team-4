@@ -1,4 +1,5 @@
 using Popocatepetl.Application.Common;
+using Popocatepetl.CLI.Localization;
 using Popocatepetl.CLI.Prompts;
 using Popocatepetl.Domain.Enums;
 using Spectre.Console;
@@ -14,17 +15,20 @@ public sealed class StackNavigator
     private readonly ICurrentUserContext _session;
     private readonly MenuChrome _chrome;
     private readonly IAnsiConsole _console;
+    private readonly LocaleState _locale;
 
     public StackNavigator(
         ISelectPrompt select,
         ICurrentUserContext session,
         MenuChrome chrome,
-        IAnsiConsole console)
+        IAnsiConsole console,
+        LocaleState locale)
     {
         _select = select;
         _session = session;
         _chrome = chrome;
         _console = console;
+        _locale = locale;
     }
 
     public async Task RunAsync(MenuNode root, CancellationToken ct)
@@ -61,6 +65,7 @@ public sealed class StackNavigator
                     stack.Pop();
                     break;
                 case MenuChoiceKind.Node when picked.Node!.IsLeaf:
+                    _locale.AlignCurrentThread();
                     await picked.Node.Action!.ExecuteAsync(ct);
                     break;
                 case MenuChoiceKind.Node:
