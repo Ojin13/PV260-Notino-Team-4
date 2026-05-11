@@ -21,6 +21,7 @@ public sealed class ExportDiffAction : IMenuAction
     private readonly IStringLocalizer<CliStrings> _loc;
     private readonly ThemeApplier _theme;
     private readonly MenuChrome _chrome;
+    private readonly LocaleState _locale;
 
     public ExportDiffAction(
         ISender sender,
@@ -31,7 +32,8 @@ public sealed class ExportDiffAction : IMenuAction
         IAnsiConsole console,
         IStringLocalizer<CliStrings> loc,
         ThemeApplier theme,
-        MenuChrome chrome)
+        MenuChrome chrome,
+        LocaleState locale)
     {
         _sender = sender;
         _select = select;
@@ -42,6 +44,7 @@ public sealed class ExportDiffAction : IMenuAction
         _loc = loc;
         _theme = theme;
         _chrome = chrome;
+        _locale = locale;
     }
 
     public string LabelKey => "menu.admin.export";
@@ -86,16 +89,21 @@ public sealed class ExportDiffAction : IMenuAction
             _loc["menu.admin.export.dialog.title"].Value, result.SuggestedFileName, palette, ct);
         if (targetPath is null)
         {
-            _console.MarkupLine($"[{palette.Muted}]cancelled[/]");
+            _console.MarkupLine($"[{palette.Muted}]{Markup.Escape(_loc["status.cancelled"].Value)}[/]");
             _chrome.WaitForContinue();
             return;
         }
 
-        await File.WriteAllBytesAsync(targetPath, result.Data, ct);
-
-        _console.MarkupLine(
-            $"[{palette.Success}]✓[/] [{palette.Highlight}]{Markup.Escape(Path.GetFullPath(targetPath))}[/] " +
-            $"[{palette.Muted}]({result.Data.Length} bytes)[/]");
+        try {
+            await File.WriteAllBytesAsync(targetPath, result.Data, ct);
+            _console.MarkupLine(
+                $"[{palette.Success}]✓[/] [{palette.Highlight}]{Markup.Escape(Path.GetFullPath(targetPath))}[/] " +
+                $"[{palette.Muted}]({result.Data.Length} bytes)[/]");
+        }
+        catch (Exception ex)
+        {
+            _console.MarkupLine($"[{palette.Error}]{Markup.Escape(_loc["error.export", ex.Message].Value)}[/]");
+        }
         _chrome.WaitForContinue();
     }
 

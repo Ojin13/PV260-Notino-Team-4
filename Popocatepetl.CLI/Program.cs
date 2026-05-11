@@ -6,11 +6,15 @@ using Popocatepetl.Application;
 using Popocatepetl.CLI;
 using Popocatepetl.CLI.Menus;
 using System.Globalization;
+using System.Text;
 using Popocatepetl.CLI.Localization;
 using Popocatepetl.CLI.Navigation;
 using Popocatepetl.CLI.Theming;
 using Popocatepetl.Infrastructure;
 using Popocatepetl.Infrastructure.Data;
+
+Console.OutputEncoding = Encoding.UTF8;
+Console.InputEncoding = Encoding.UTF8;
 
 var builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings
 {

@@ -16,19 +16,22 @@ public sealed class ViewLatestDiffAction : IMenuAction
     private readonly IStringLocalizer<CliStrings> _loc;
     private readonly ThemeApplier _theme;
     private readonly MenuChrome _chrome;
+    private readonly LocaleState _locale;
 
     public ViewLatestDiffAction(
         ISender sender,
         IAnsiConsole console,
         IStringLocalizer<CliStrings> loc,
         ThemeApplier theme,
-        MenuChrome chrome)
+        MenuChrome chrome,
+        LocaleState locale)
     {
         _sender = sender;
         _console = console;
         _loc = loc;
         _theme = theme;
         _chrome = chrome;
+        _locale = locale;
     }
 
     public string LabelKey => "menu.user.diff.view";
@@ -36,6 +39,7 @@ public sealed class ViewLatestDiffAction : IMenuAction
     public async Task ExecuteAsync(CancellationToken ct)
     {
         var diff = await _sender.Send(new GetDiffReportQuery(), ct);
+        _locale.AlignCurrentThread();
         var palette = _theme.Active;
 
         if (diff is null)
@@ -55,12 +59,12 @@ public sealed class ViewLatestDiffAction : IMenuAction
         var table = new Table()
             .Border(TableBorder.Rounded)
             .BorderStyle(palette.BorderStyle())
-            .AddColumn(new TableColumn(new Markup($"[{palette.Heading}]Ticker[/]")))
-            .AddColumn(new TableColumn(new Markup($"[{palette.Heading}]Name[/]")))
-            .AddColumn(new TableColumn(new Markup($"[{palette.Heading}]Shares[/]")).RightAligned())
-            .AddColumn(new TableColumn(new Markup($"[{palette.Heading}]Δ %[/]")).RightAligned())
-            .AddColumn(new TableColumn(new Markup($"[{palette.Heading}]Type[/]")))
-            .AddColumn(new TableColumn(new Markup($"[{palette.Heading}]Weight %[/]")).RightAligned());
+            .AddColumn(new TableColumn(new Markup($"[{palette.Heading}]{Markup.Escape(_loc["diff.col.ticker"].Value)}[/]")))
+            .AddColumn(new TableColumn(new Markup($"[{palette.Heading}]{Markup.Escape(_loc["diff.col.name"].Value)}[/]")))
+            .AddColumn(new TableColumn(new Markup($"[{palette.Heading}]{Markup.Escape(_loc["diff.col.shares"].Value)}[/]")).RightAligned())
+            .AddColumn(new TableColumn(new Markup($"[{palette.Heading}]{Markup.Escape(_loc["diff.col.delta"].Value)}[/]")).RightAligned())
+            .AddColumn(new TableColumn(new Markup($"[{palette.Heading}]{Markup.Escape(_loc["diff.col.type"].Value)}[/]")))
+            .AddColumn(new TableColumn(new Markup($"[{palette.Heading}]{Markup.Escape(_loc["diff.col.weight"].Value)}[/]")).RightAligned());
 
         foreach (var row in diff)
         {
