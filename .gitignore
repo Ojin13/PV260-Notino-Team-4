@@ -1,0 +1,31 @@
+# Node / Nuxt
+node_modules/
+.nuxt/
+.output/
+.data/
+dist/
+*.log
+
+# Env
+.env
+.env.*
+!.env.example
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# .NET project folders carried over from sibling branches.
+# This branch only holds the Nuxt presentation site; the .NET projects
+# live on main / milestone-* and must not be committed here.
+Popocatepetl.Api/
+Popocatepetl.Application/
+Popocatepetl.Application.Tests/
+Popocatepetl.CLI/
+Popocatepetl.CLI.Tests/
+Popocatepetl.Domain/
+Popocatepetl.Infrastructure/
+Popocatepetl.Infrastructure.Tests/
+Scope.Application.Tests/
+popocatepetl.db

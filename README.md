@@ -1,14 +1,34 @@
-# PV260 - Software Quality - Team 4
+# Popocatepetl — presentation site
 
-This repository contains a team project for the Notino C# seminar (Spring 2026).
+This branch (`github-page`) holds the source for the project's GitHub Pages
+site, built with **Nuxt 3**. The .NET application itself lives on `main`.
 
-**Members:**
-- [Robin Chmelík](https://is.muni.cz/auth/osoba/514315)
-- [Matej Kučera](https://is.muni.cz/auth/osoba/514093)
-- [Adam Haluška](https://is.muni.cz/auth/osoba/536303)
-- [Radoslav Baník](https://is.muni.cz/auth/osoba/536584)
-- [Matúš Fedorko](https://is.muni.cz/auth/osoba/matus.fedorko)
+Live site: <https://ojin13.github.io/PV260-Notino-Team-4/>
 
-**Tutors:**
-- [Erika Bača](https://is.muni.cz/auth/osoba/540487)
-- [Erik Matuška](https://is.muni.cz/auth/osoba/493344)
+## Local development
+
+```bash
+npm install
+npm run dev          # http://localhost:3000
+```
+
+## Production build
+
+```bash
+npm run generate     # outputs static files to .output/public
+```
+
+## Deployment
+
+Every push to `github-page` triggers `.github/workflows/deploy-pages.yml`,
+which runs `nuxt generate` and publishes the static output via
+`actions/deploy-pages`. The repository's **Settings → Pages** must have
+**Source** set to **"GitHub Actions"** (not a branch) for the workflow to
+deploy.
+
+## Download link
+
+The site's download button points to
+`https://github.com/Ojin13/PV260-Notino-Team-4/releases/latest/download/Popocatepetl.CLI-win-x64.zip`.
+That URL is produced by the release workflow on `main`, which builds a
+self-contained Windows executable on every merge.
