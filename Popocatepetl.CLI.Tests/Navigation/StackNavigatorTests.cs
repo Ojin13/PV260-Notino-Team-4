@@ -16,8 +16,9 @@ public class StackNavigatorTests
         var console = new TestConsole();
         var theme = new ThemeApplier();
         var loc = new FakeStringLocalizer<CliStrings>();
+        var locale = new LocaleState();
         var chrome = new MenuChrome(console, session, loc, theme);
-        var nav = new StackNavigator(prompt, session, chrome, console);
+        var nav = new StackNavigator(prompt, session, chrome, console, locale);
         return (nav, session);
     }
 
