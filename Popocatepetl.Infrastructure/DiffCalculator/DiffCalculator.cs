@@ -2,12 +2,10 @@ using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
 using Popocatepetl.Domain.Entities;
-using Popocatepetl.Domain.Enums;
 using Popocatepetl.Domain.Interfaces;
 
 namespace Popocatepetl.Infrastructure.DiffCalculator;
 
-/// <summary>Calculates report diffs from CSV report content using CsvHelper.</summary>
 public sealed class DiffCalculator : IDiffCalculator
 {
     public DiffResult Calculate(Report baseline, Report current)
@@ -15,74 +13,12 @@ public sealed class DiffCalculator : IDiffCalculator
         var baselineRows = ParseRows(baseline.RawContent);
         var currentRows = ParseRows(current.RawContent);
 
-        var diffRows = CalculateDiffRows(baselineRows, currentRows);
-        return DiffResult.Create(
-            baseline.Id,
-            current.Id,
-            diffDataEntries: diffRows);
+        return DiffResult.CreateFromHoldings(baseline.Id, current.Id, baselineRows, currentRows);
     }
 
-    private static IReadOnlyList<DiffData> CalculateDiffRows(
-        IReadOnlyDictionary<string, ReportRow> baselineRows,
-        IReadOnlyDictionary<string, ReportRow> currentRows)
+    private static IReadOnlyDictionary<string, HoldingSnapshot> ParseRows(string csvContent)
     {
-        var diffs = new List<DiffData>();
-
-        foreach (var (securityKey, current) in currentRows)
-        {
-            if (!baselineRows.TryGetValue(securityKey, out var baseline))
-            {
-                diffs.Add(DiffData.Create(
-                    current.Name,
-                    current.Ticker,
-                    current.Shares,
-                    100,
-                    ShareDiffType.New,
-                    current.WeightPercent));
-                continue;
-            }
-
-            var sharesDelta = current.Shares - baseline.Shares;
-            if (sharesDelta == 0)
-            {
-                continue;
-            }
-
-            var diffPercent = baseline.Shares == 0
-                ? 100
-                : (double)sharesDelta / baseline.Shares * 100;
-
-            diffs.Add(DiffData.Create(
-                current.Name,
-                current.Ticker,
-                sharesDelta,
-                diffPercent,
-                sharesDelta > 0 ? ShareDiffType.Increased : ShareDiffType.Decreased,
-                current.WeightPercent));
-        }
-
-        foreach (var (securityKey, baseline) in baselineRows)
-        {
-            if (currentRows.ContainsKey(securityKey))
-            {
-                continue;
-            }
-
-            diffs.Add(DiffData.Create(
-                baseline.Name,
-                baseline.Ticker,
-                -baseline.Shares,
-                -100,
-                ShareDiffType.Decreased,
-                0));
-        }
-
-        return diffs;
-    }
-
-    private static IReadOnlyDictionary<string, ReportRow> ParseRows(string csvContent)
-    {
-        var records = new Dictionary<string, ReportRow>(StringComparer.OrdinalIgnoreCase);
+        var records = new Dictionary<string, HoldingSnapshot>(StringComparer.OrdinalIgnoreCase);
 
         using var stringReader = new StringReader(csvContent);
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -107,7 +43,7 @@ public sealed class DiffCalculator : IDiffCalculator
                     continue;
                 }
 
-                records[securityKey] = new ReportRow(
+                records[securityKey] = new HoldingSnapshot(
                     row.Ticker,
                     row.Company ?? string.Empty,
                     row.Shares,
@@ -154,9 +90,4 @@ public sealed class DiffCalculator : IDiffCalculator
         }
     }
 
-    private sealed record ReportRow(
-        string Ticker,
-        string Name,
-        int Shares,
-        double WeightPercent);
 }

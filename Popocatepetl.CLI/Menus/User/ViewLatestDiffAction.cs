@@ -42,9 +42,16 @@ public sealed class ViewLatestDiffAction : IMenuAction
         _locale.AlignCurrentThread();
         var palette = _theme.Active;
 
-        if (diff is null || diff.Count == 0)
+        if (diff is null)
         {
             _console.MarkupLine($"[{palette.Muted}]{Markup.Escape(_loc["diff.empty"].Value)}[/]");
+            _chrome.WaitForContinue();
+            return;
+        }
+
+        if (diff.Count == 0)
+        {
+            _console.MarkupLine($"[{palette.Muted}]{Markup.Escape(_loc["diff.identical"].Value)}[/]");
             _chrome.WaitForContinue();
             return;
         }

@@ -1,22 +1,22 @@
+using MediatR;
 using Microsoft.Extensions.Localization;
 using Popocatepetl.Application.Common;
+using Popocatepetl.Application.Queries.Admin;
 using Popocatepetl.CLI.Localization;
 using Popocatepetl.CLI.Navigation;
 using Popocatepetl.CLI.Prompts;
 using Popocatepetl.CLI.Theming;
-using Popocatepetl.Domain.Interfaces;
 using Spectre.Console;
 
 namespace Popocatepetl.CLI.Menus.Admin;
 
 public sealed class ExportDiffAction : IMenuAction
 {
+    private readonly ISender _sender;
     private readonly ISelectPrompt _select;
     private readonly ITextPrompt _text;
     private readonly IConfirmPrompt _confirm;
     private readonly IFileSaveDialog _dialog;
-    private readonly IDiffResultRepository _diffRepo;
-    private readonly IDiffExporter _exporter;
     private readonly IAnsiConsole _console;
     private readonly IStringLocalizer<CliStrings> _loc;
     private readonly ThemeApplier _theme;
@@ -24,24 +24,22 @@ public sealed class ExportDiffAction : IMenuAction
     private readonly LocaleState _locale;
 
     public ExportDiffAction(
+        ISender sender,
         ISelectPrompt select,
         ITextPrompt text,
         IConfirmPrompt confirm,
         IFileSaveDialog dialog,
-        IDiffResultRepository diffRepo,
-        IDiffExporter exporter,
         IAnsiConsole console,
         IStringLocalizer<CliStrings> loc,
         ThemeApplier theme,
         MenuChrome chrome,
         LocaleState locale)
     {
+        _sender = sender;
         _select = select;
         _text = text;
         _confirm = confirm;
         _dialog = dialog;
-        _diffRepo = diffRepo;
-        _exporter = exporter;
         _console = console;
         _loc = loc;
         _theme = theme;
@@ -55,15 +53,6 @@ public sealed class ExportDiffAction : IMenuAction
     {
         var palette = _theme.Active;
 
-        var diff = await _diffRepo.GetLastAsync();
-        _locale.AlignCurrentThread();
-        if (diff is null)
-        {
-            _console.MarkupLine($"[{palette.Muted}]{Markup.Escape(_loc["diff.empty"].Value)}[/]");
-            _chrome.WaitForContinue();
-            return;
-        }
-
         var format = await _select.AskAsync(
             "menu.admin.export.format",
             new[]
@@ -73,8 +62,31 @@ public sealed class ExportDiffAction : IMenuAction
             },
             ct);
 
-        var defaultName = $"diff-{diff.GeneratedAt:yyyyMMdd-HHmmss}.{(format == DiffExportFormat.Pdf ? "pdf" : "csv")}";
-        var targetPath = await ResolveTargetPathAsync(_loc["menu.admin.export.dialog.title"].Value, defaultName, palette, ct);
+        Application.Dtos.ExportDiffResponse? result;
+        try
+        {
+            result = await _console
+                .Status()
+                .Spinner(Spinner.Known.Dots)
+                .StartAsync(_loc["status.exporting"].Value, _ =>
+                    _sender.Send(new ExportDiffQuery(format), ct));
+        }
+        catch (Exception ex)
+        {
+            _console.MarkupLine($"[{palette.Error}]export failed: {Markup.Escape(ex.Message)}[/]");
+            _chrome.WaitForContinue();
+            return;
+        }
+
+        if (result is null)
+        {
+            _console.MarkupLine($"[{palette.Muted}]{Markup.Escape(_loc["diff.empty"].Value)}[/]");
+            _chrome.WaitForContinue();
+            return;
+        }
+
+        var targetPath = await ResolveTargetPathAsync(
+            _loc["menu.admin.export.dialog.title"].Value, result.SuggestedFileName, palette, ct);
         if (targetPath is null)
         {
             _console.MarkupLine($"[{palette.Muted}]{Markup.Escape(_loc["status.cancelled"].Value)}[/]");
@@ -82,23 +94,11 @@ public sealed class ExportDiffAction : IMenuAction
             return;
         }
 
-        try
-        {
-            var bytes = await _console
-                .Status()
-                .Spinner(Spinner.Known.Dots)
-                .StartAsync(_loc["status.exporting"].Value, async _ =>
-                {
-                    var data = format == DiffExportFormat.Pdf
-                        ? _exporter.ToPdf(diff, diff.DiffDataEntries)
-                        : _exporter.ToCsv(diff, diff.DiffDataEntries);
-                    await File.WriteAllBytesAsync(targetPath, data, ct);
-                    return data;
-                });
-
+        try {
+            await File.WriteAllBytesAsync(targetPath, result.Data, ct);
             _console.MarkupLine(
                 $"[{palette.Success}]✓[/] [{palette.Highlight}]{Markup.Escape(Path.GetFullPath(targetPath))}[/] " +
-                $"[{palette.Muted}]({bytes.Length} bytes)[/]");
+                $"[{palette.Muted}]({result.Data.Length} bytes)[/]");
         }
         catch (Exception ex)
         {
