@@ -1,0 +1,95 @@
+name: Release
+
+# Build a self-contained Windows .exe and attach it to a GitHub Release
+# on every merge to main. The presentation site links to
+# `releases/latest/download/Popocatepetl.CLI-win-x64.zip`, so as soon as
+# this workflow finishes the new build is what the public download serves.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        description: 'Mark as prerelease (keeps it out of /releases/latest)'
+        type: boolean
+        default: true
+      tag_suffix:
+        description: 'Optional tag suffix, e.g. "test" → v2026.05.12.42-test'
+        type: string
+        default: 'test'
+
+permissions:
+  contents: write   # needed to create the release and push the tag
+
+concurrency:
+  group: release-main
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build & publish Windows release
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Compute version & release flags
+        id: ver
+        shell: pwsh
+        run: |
+          $tag = "v$(Get-Date -Format 'yyyy.MM.dd').${{ github.run_number }}"
+
+          # Push to main = real release. Manual dispatch = prerelease by
+          # default (toggleable via the workflow_dispatch input), tagged
+          # with the provided suffix so it's visually distinct.
+          if ('${{ github.event_name }}' -eq 'workflow_dispatch') {
+            $suffix = '${{ inputs.tag_suffix }}'
+            if ($suffix) { $tag = "$tag-$suffix" }
+            $prerelease = '${{ inputs.prerelease }}'
+          } else {
+            $prerelease = 'false'
+          }
+
+          "tag=$tag"               | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "name=Popocatepetl $tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "prerelease=$prerelease" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+
+      - name: Publish CLI (win-x64, self-contained, single-file)
+        shell: pwsh
+        run: |
+          dotnet publish Popocatepetl.CLI/Popocatepetl.CLI.csproj `
+            --configuration Release `
+            --runtime win-x64 `
+            --self-contained true `
+            -p:PublishSingleFile=true `
+            -p:IncludeNativeLibrariesForSelfExtract=true `
+            -p:DebugType=embedded `
+            --output publish
+
+      - name: Package as zip
+        shell: pwsh
+        run: |
+          Compress-Archive `
+            -Path publish/* `
+            -DestinationPath Popocatepetl.CLI-win-x64.zip `
+            -Force
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.ver.outputs.tag }}
+          name: ${{ steps.ver.outputs.name }}
+          target_commitish: ${{ github.sha }}
+          # Computed in the version step: true for anything that isn't a
+          # push to main, so /releases/latest only ever tracks main builds.
+          prerelease: ${{ steps.ver.outputs.prerelease == 'true' }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: Popocatepetl.CLI-win-x64.zip

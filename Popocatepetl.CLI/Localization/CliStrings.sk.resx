@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e105</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e105</value>
+  </resheader>
+  <data name="auth.email.prompt" xml:space="preserve"><value>E-mail</value></data>
+  <data name="auth.email.empty" xml:space="preserve"><value>E-mail nesmie byť prázdny.</value></data>
+  <data name="auth.email.invalid" xml:space="preserve"><value>Neplatná e-mailová adresa.</value></data>
+  <data name="auth.admin.password.prompt" xml:space="preserve"><value>Administrátorské heslo</value></data>
+  <data name="auth.admin.password.invalid" xml:space="preserve"><value>Nesprávne heslo.</value></data>
+  <data name="menu.top.title" xml:space="preserve"><value>Hlavné menu</value></data>
+  <data name="menu.role.select" xml:space="preserve"><value>Vybrať rolu</value></data>
+  <data name="menu.role.title" xml:space="preserve"><value>Rola</value></data>
+  <data name="menu.role.user" xml:space="preserve"><value>Bežný používateľ</value></data>
+  <data name="menu.role.poweruser" xml:space="preserve"><value>Pokročilý používateľ</value></data>
+  <data name="menu.role.admin" xml:space="preserve"><value>Administrátor</value></data>
+  <data name="menu.user.title" xml:space="preserve"><value>Používateľ</value></data>
+  <data name="menu.user.diff.view" xml:space="preserve"><value>Zobraziť posledný diff</value></data>
+  <data name="menu.poweruser.title" xml:space="preserve"><value>Pokročilý používateľ</value></data>
+  <data name="menu.poweruser.theme.change" xml:space="preserve"><value>Zmeniť farebnú schému</value></data>
+  <data name="menu.poweruser.send" xml:space="preserve"><value>Odoslať report e-mailom</value></data>
+  <data name="menu.admin.title" xml:space="preserve"><value>Administrátor</value></data>
+  <data name="menu.admin.download" xml:space="preserve"><value>Stiahnuť nový report</value></data>
+  <data name="menu.admin.export" xml:space="preserve"><value>Exportovať diff</value></data>
+  <data name="menu.admin.export.path" xml:space="preserve"><value>Cieľová cesta (prázdne = predvolené)</value></data>
+  <data name="menu.admin.export.path.default" xml:space="preserve"><value>Predvolené: {0}</value></data>
+  <data name="menu.admin.export.overwrite" xml:space="preserve"><value>Prepísať?</value></data>
+  <data name="menu.admin.export.overwrite.exists" xml:space="preserve"><value>Súbor už existuje: {0}</value></data>
+  <data name="menu.admin.export.dialog.title" xml:space="preserve"><value>Uložiť export ako</value></data>
+  <data name="menu.admin.download.dialog.title" xml:space="preserve"><value>Uložiť stiahnutý report ako</value></data>
+  <data name="menu.admin.download.savecopy.prompt" xml:space="preserve"><value>Uložiť lokálnu kópiu stiahnutého CSV?</value></data>
+  <data name="menu.admin.download.path" xml:space="preserve"><value>Cieľová cesta (prázdne = predvolené)</value></data>
+  <data name="menu.poweruser.send.invalid" xml:space="preserve"><value>Neplatná e-mailová adresa: {0}</value></data>
+  <data name="menu.poweruser.send.empty" xml:space="preserve"><value>Vyžaduje sa aspoň jeden príjemca.</value></data>
+  <data name="menu.poweruser.send.too-many" xml:space="preserve"><value>Príliš veľa príjemcov (max 100).</value></data>
+  <data name="menu.admin.auditlogs" xml:space="preserve"><value>Zobraziť audit log</value></data>
+  <data name="menu.language.change" xml:space="preserve"><value>Zmeniť jazyk aplikácie</value></data>
+  <data name="menu.language.title" xml:space="preserve"><value>Jazyk</value></data>
+  <data name="menu.back" xml:space="preserve"><value>← Späť</value></data>
+  <data name="menu.exit" xml:space="preserve"><value>Koniec</value></data>
+  <data name="status.downloading" xml:space="preserve"><value>Sťahovanie reportu…</value></data>
+  <data name="status.sending" xml:space="preserve"><value>Odosielanie e-mailu…</value></data>
+  <data name="status.exporting" xml:space="preserve"><value>Zápis exportu…</value></data>
+  <data name="diff.identical" xml:space="preserve"><value>Posledný a predchádzajúci report sú totožné.</value></data>
+  <data name="prompt.continue" xml:space="preserve"><value>Stlačte ľubovoľnú klávesu pre pokračovanie…</value></data>
+  <data name="menu.poweruser.theme.title" xml:space="preserve"><value>Farebná schéma</value></data>
+  <data name="menu.poweruser.send.recipients" xml:space="preserve"><value>Príjemcovia (oddelení čiarkou alebo bodkočiarkou, prázdne = storno)</value></data>
+  <data name="menu.poweruser.send.format" xml:space="preserve"><value>Formát prílohy</value></data>
+  <data name="menu.poweruser.send.confirm" xml:space="preserve"><value>Odoslať teraz?</value></data>
+  <data name="menu.admin.export.format" xml:space="preserve"><value>Formát exportu</value></data>
+  <data name="theme.default" xml:space="preserve"><value>Predvolené</value></data>
+  <data name="theme.high-contrast" xml:space="preserve"><value>Vysoký kontrast</value></data>
+  <data name="language.en" xml:space="preserve"><value>Angličtina</value></data>
+  <data name="diff.empty" xml:space="preserve"><value>Diff zatiaľ nie je k dispozícii.</value></data>
+  <data name="audit.empty" xml:space="preserve"><value>Žiadne záznamy auditu nie sú k dispozícii.</value></data>
+  <data name="diff.col.ticker" xml:space="preserve"><value>Ticker</value></data>
+  <data name="diff.col.name" xml:space="preserve"><value>Názov</value></data>
+  <data name="diff.col.shares" xml:space="preserve"><value>Akcie</value></data>
+  <data name="diff.col.delta" xml:space="preserve"><value>Δ %</value></data>
+  <data name="diff.col.type" xml:space="preserve"><value>Typ</value></data>
+  <data name="diff.col.weight" xml:space="preserve"><value>Váha %</value></data>
+  <data name="audit.col.timestamp" xml:space="preserve"><value>Čas</value></data>
+  <data name="audit.col.email" xml:space="preserve"><value>Email</value></data>
+  <data name="audit.col.action" xml:space="preserve"><value>Akcia</value></data>
+  <data name="audit.col.status" xml:space="preserve"><value>Stav</value></data>
+  <data name="audit.col.details" xml:space="preserve"><value>Podrobnosti</value></data>
+  <data name="audit.status.ok" xml:space="preserve"><value>ok</value></data>
+  <data name="audit.status.err" xml:space="preserve"><value>chyba</value></data>
+  <data name="audit.truncated" xml:space="preserve"><value>({0} starších záznamov vynechaných)</value></data>
+  <data name="theme.col.palette" xml:space="preserve"><value>Paleta</value></data>
+  <data name="theme.col.heading" xml:space="preserve"><value>Nadpis</value></data>
+  <data name="theme.col.highlight" xml:space="preserve"><value>Zvýraznenie</value></data>
+  <data name="theme.col.success" xml:space="preserve"><value>Úspech</value></data>
+  <data name="theme.col.warning" xml:space="preserve"><value>Varovanie</value></data>
+  <data name="theme.col.error" xml:space="preserve"><value>Chyba</value></data>
+  <data name="status.cancelled" xml:space="preserve"><value>Zrušené</value></data>
+  <data name="status.sent" xml:space="preserve"><value>Odoslané</value></data>
+  <data name="status.saved" xml:space="preserve"><value>Kópia uložená</value></data>
+  <data name="error.export" xml:space="preserve"><value>Chyba exportu: {0}</value></data>
+  <data name="error.save" xml:space="preserve"><value>Chyba uloženia: {0}</value></data>
+  <data name="error.send" xml:space="preserve"><value>Chyba odoslania: {0}</value></data>
+  <data name="error.generic" xml:space="preserve"><value>Chyba</value></data>
+  <data name="error.report.missing" xml:space="preserve"><value>Report zmizol z databázy</value></data>
+  <data name="status.diff.recalculated" xml:space="preserve"><value>Diff prepočítaný oproti predchádzajúcemu reportu</value></data>
+  <data name="status.diff.first" xml:space="preserve"><value>Žiadny predchádzajúci report — diff sa zobrazí po ďalšom stiahnutí</value></data>
+  <data name="send.recipients.summary" xml:space="preserve"><value>Príjemcovia ({0}, formát={1}):</value></data>
+  <data name="audit.action.ChangeTheme" xml:space="preserve"><value>Zmena témy</value></data>
+  <data name="audit.action.ChangeLanguage" xml:space="preserve"><value>Zmena jazyka</value></data>
+  <data name="audit.action.SendEmailReport" xml:space="preserve"><value>Odoslanie reportu e-mailom</value></data>
+  <data name="audit.action.DownloadLatestReport" xml:space="preserve"><value>Stiahnutie najnovšieho reportu</value></data>
+  <data name="audit.action.CreateReportsDiff" xml:space="preserve"><value>Výpočet rozdielov reportov</value></data>
+  <data name="audit.action.UpdateUser" xml:space="preserve"><value>Aktualizácia používateľa</value></data>
+  <data name="audit.action.CreateUser" xml:space="preserve"><value>Vytvorenie používateľa</value></data>
+  <data name="audit.action.DeleteUser" xml:space="preserve"><value>Vymazanie používateľa</value></data>
+  <data name="audit.detail.Palette" xml:space="preserve"><value>Paleta</value></data>
+  <data name="audit.detail.Locale" xml:space="preserve"><value>Jazyk</value></data>
+</root>
