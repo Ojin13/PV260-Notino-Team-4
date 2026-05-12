@@ -10,9 +10,8 @@ riderModule.iml
 *.db-wal
 
 # AI / IDE assistant files
-.claude/
+.claude/*
 !.claude/skills/
-!.claude/skills/**
 .idea/
 
 
