@@ -1,4 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
+using Popocatepetl.Application.Common;
+using Popocatepetl.Domain.Enums;
 using Popocatepetl.Domain.Interfaces;
 
 namespace Popocatepetl.Application.Tests.TestUtilities;
@@ -12,21 +14,29 @@ public abstract class HandlerTestBase : IDisposable
     protected Mock<IEmailService> EmailService { get; }
     protected Mock<IDiffResultRepository> DiffResultRepository { get; }
     protected Mock<IDiffExporter> DiffExporter { get; }
+    protected Mock<IAuditLogRepository> AuditLogRepository { get; }
+    protected Mock<ICurrentUserContext> CurrentUserContext { get; }
 
     protected HandlerTestBase()
     {
         var builder = new MockedIocBuilder();
         builder
+            .AddApplication()
             .AddMockedEmailService(out var emailService)
             .AddMockedDiffResultRepository(out var diffResultRepository)
             .AddMockedDiffExporter(out var diffExporter)
-            .AddMediatR(typeof(DependencyInjection).Assembly);
+            .AddMockedAuditLogRepository(out var auditLogRepository)
+            .AddMockedCurrentUserContext(out var currentUserContext);
 
         _serviceProvider = builder.Build();
         Mediator = _serviceProvider.GetRequiredService<IMediator>();
         EmailService = emailService;
         DiffResultRepository = diffResultRepository;
         DiffExporter = diffExporter;
+        AuditLogRepository = auditLogRepository;
+        CurrentUserContext = currentUserContext;
+        CurrentUserContext.SetupGet(x => x.Email).Returns("tester@example.com");
+        CurrentUserContext.SetupGet(x => x.Role).Returns(UserRole.Admin);
     }
 
     public void Dispose()
