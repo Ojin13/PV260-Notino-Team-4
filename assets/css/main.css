@@ -306,6 +306,65 @@ a:hover {
   font-size: 14px;
 }
 
+/* ---------- install steps ---------- */
+
+.steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 14px;
+}
+
+.steps li {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  align-items: center;
+  gap: 18px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 22px;
+}
+
+.step-num {
+  font-family: var(--font-mono);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+}
+
+.steps strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.steps em {
+  font-style: normal;
+  font-family: var(--font-mono);
+  color: var(--text);
+  background: var(--bg-elev-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 13px;
+}
+
+.steps code {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-size: 13.5px;
+}
+
+.step-link {
+  display: inline-block;
+  margin-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 13.5px;
+  color: var(--accent);
+}
+
 /* ---------- code block ---------- */
 
 .code {

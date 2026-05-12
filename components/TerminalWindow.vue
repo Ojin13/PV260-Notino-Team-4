@@ -23,56 +23,66 @@ const lines: Line[] = [
   {
     segments: [
       { text: '$ ', tone: 'prompt' },
-      { text: 'popocatepetl fetch-ark --funds ARKK,ARKG,ARKW' }
+      { text: 'Popocatepetl.CLI.exe' }
     ],
-    pauseAfter: 320
+    pauseAfter: 280
   },
   {
     segments: [
-      { text: '→ downloading ARKK holdings............ ', tone: 'muted' },
-      { text: 'OK', tone: 'ok' }
+      { text: '─── Popocatepetl ───────────────────', tone: 'muted' }
     ]
   },
   {
     segments: [
-      { text: '→ downloading ARKG holdings............ ', tone: 'muted' },
-      { text: 'OK', tone: 'ok' }
+      { text: 'email > ', tone: 'prompt' },
+      { text: 'admin@example.com' }
+    ]
+  },
+  { segments: [{ text: '' }] },
+  {
+    segments: [
+      { text: '? select action', tone: 'info' }
     ]
   },
   {
     segments: [
-      { text: '→ downloading ARKW holdings............ ', tone: 'muted' },
-      { text: 'OK', tone: 'ok' }
+      { text: '  ▸ ', tone: 'prompt' },
+      { text: 'download latest report' }
     ]
   },
   {
     segments: [
-      { text: '→ diffing against previous report...... ', tone: 'muted' },
-      { text: 'OK', tone: 'ok' }
+      { text: '    export diff', tone: 'muted' }
     ]
   },
   {
     segments: [
-      { text: '→ ', tone: 'muted' },
-      { text: '14 changes', tone: 'info' },
-      { text: ' detected ', tone: 'muted' },
-      { text: '(', tone: 'muted' },
-      { text: '+8', tone: 'ok' },
-      { text: ' / ', tone: 'muted' },
-      { text: '−6', tone: 'warn' },
-      { text: ')', tone: 'muted' }
+      { text: '    audit logs', tone: 'muted' }
     ]
   },
   {
     segments: [
-      { text: '→ writing report to popocatepetl.db.... ', tone: 'muted' },
-      { text: 'OK', tone: 'ok' }
+      { text: '    quit', tone: 'muted' }
+    ]
+  },
+  { segments: [{ text: '' }] },
+  {
+    segments: [
+      { text: 'password > ', tone: 'prompt' },
+      { text: '●●●●●●●●●●●●●●●', tone: 'muted' }
     ]
   },
   {
     segments: [
-      { text: '→ email sent to 3 recipients........... ', tone: 'muted' },
-      { text: '✓', tone: 'ok' }
+      { text: '✓ ', tone: 'ok' },
+      { text: 'report downloaded' }
+    ]
+  },
+  {
+    segments: [
+      { text: '✓ ', tone: 'ok' },
+      { text: 'diff recomputed — ', tone: 'muted' },
+      { text: '14 changes', tone: 'info' }
     ]
   },
   { segments: [{ text: '' }] },

@@ -2,62 +2,52 @@
 import TerminalWindow from '~/components/TerminalWindow.vue'
 
 const repoUrl = 'https://github.com/Ojin13/PV260-Notino-Team-4'
-const downloadUrl = `${repoUrl}/releases/latest/download/Popocatepetl.CLI-win-x64.zip`
-const releasesUrl = `${repoUrl}/releases/latest`
+
+// Temporary: no real release exists yet, so the download button points at
+// the latest milestone-2 prerelease. When the first push to main produces
+// a real release, delete `latestPrereleaseTag` and let downloadUrl /
+// releasesUrl fall back to `/releases/latest`, which auto-tracks the
+// newest non-prerelease.
+const latestPrereleaseTag = 'v2026.05.12.2-milestone-2'
+
+const downloadUrl = latestPrereleaseTag
+  ? `${repoUrl}/releases/download/${latestPrereleaseTag}/Popocatepetl.CLI-win-x64.zip`
+  : `${repoUrl}/releases/latest/download/Popocatepetl.CLI-win-x64.zip`
+
+const releasesUrl = latestPrereleaseTag
+  ? `${repoUrl}/releases/tag/${latestPrereleaseTag}`
+  : `${repoUrl}/releases/latest`
 
 const features = [
   {
-    glyph: '⇣',
-    title: 'ARK report fetcher',
-    body: 'Pulls the latest daily holdings CSV for any ARK ETF straight from ark-funds.com and stores a compact snapshot in a local SQLite database.'
-  },
-  {
     glyph: '∆',
-    title: 'Daily diffs',
-    body: 'Compares today\'s holdings against the previous report and surfaces additions, removals, and weight changes — no spreadsheet wrangling needed.'
+    title: 'Download & diff',
+    body: 'Admins fetch the latest report and the app compares it against the previously stored one. Only the most recent report is kept.'
   },
   {
     glyph: '✉',
     title: 'Email reports',
-    body: 'Ships the daily diff as a clean CSV attachment to a configurable list of recipients. SMTP credentials are read from your environment.'
+    body: 'Power Users send the current diff to up to 100 recipients via SendGrid, with confirmation before sending.'
   },
   {
-    glyph: '⛭',
-    title: 'Configurable funds',
-    body: 'Track one or many funds — ARKK, ARKG, ARKW, ARKQ, ARKF, IZRL, PRNT — pass them as CLI flags or persist a default list.'
+    glyph: '↧',
+    title: 'Export to file',
+    body: 'Admins can export the current diff to a file for sharing or archiving.'
   },
   {
     glyph: '☰',
-    title: 'Audit logging',
-    body: 'Every fetch, diff, and email is logged with Spectre.Console output and persisted, so you can replay what happened on any given day.'
+    title: 'Audit log',
+    body: 'Every login, download, export, theme change and email is logged. Admins can list and filter by user, date, or action.'
   },
   {
-    glyph: '◇',
-    title: 'Self-contained',
-    body: 'Ships as a single .exe with the .NET 10 runtime baked in. No installer, no SDK on the target machine — download and run.'
-  }
-]
-
-const commands = [
-  {
-    invocation: 'popocatepetl fetch-ark',
-    desc: 'Download the latest holdings for the configured ARK funds and write a snapshot to the database.'
+    glyph: '⚐',
+    title: 'Roles & access',
+    body: 'Three roles — User, Admin, Power User. Admin features are gated by a password.'
   },
   {
-    invocation: 'popocatepetl diff',
-    desc: 'Compute the diff between the two most recent snapshots and print it to the console.'
-  },
-  {
-    invocation: 'popocatepetl send-report',
-    desc: 'Build a CSV diff and email it to every recipient configured in appsettings.'
-  },
-  {
-    invocation: 'popocatepetl run --schedule daily',
-    desc: 'Fetch, diff, and email in a single pass — the command you want behind a Windows scheduled task.'
-  },
-  {
-    invocation: 'popocatepetl --help',
-    desc: 'Show every available command and flag with examples.'
+    glyph: '⌘',
+    title: 'Themes & languages',
+    body: 'Switchable color themes for Power Users and a fully translated UI for everyone.'
   }
 ]
 </script>
@@ -73,7 +63,6 @@ const commands = [
         <nav class="nav-links">
           <a href="#features">features</a>
           <a href="#install">install</a>
-          <a href="#commands">commands</a>
           <a :href="repoUrl" target="_blank" rel="noopener">github ↗</a>
         </nav>
       </div>
@@ -88,23 +77,22 @@ const commands = [
                 <span aria-hidden="true">●</span> v2026 · windows · console
               </span>
               <h1>
-                Track ARK funds<br />
-                from your <span class="gradient">terminal</span>.
+                Track what changed<br />
+                in your <span class="gradient">reports</span>.
               </h1>
               <p class="lead">
-                Popocatepetl is a Windows console application that downloads the
-                daily ARK ETF holdings, diffs them against yesterday, and emails
-                the changes — all in one command.
+                A Windows console app. Download a report, compare it to the
+                previous one, share what changed.
               </p>
               <div class="cta-row">
                 <a class="btn btn-primary" :href="downloadUrl">
                   ⇣ Download for Windows
                 </a>
                 <a class="btn" :href="releasesUrl" target="_blank" rel="noopener">
-                  view all releases
+                  all releases
                 </a>
                 <a class="btn" :href="repoUrl" target="_blank" rel="noopener">
-                  source on github
+                  source
                 </a>
               </div>
             </div>
@@ -118,8 +106,8 @@ const commands = [
           <div class="section-label">// features</div>
           <h2>What it does</h2>
           <p class="section-lead">
-            Small, focused, and built for one job: keep an eye on ARK
-            holdings without opening a single browser tab.
+            One job: download a report, compute the diff, and get it
+            in front of the people who need it.
           </p>
           <div class="feature-grid">
             <div v-for="feature in features" :key="feature.title" class="card">
@@ -134,37 +122,34 @@ const commands = [
       <section class="section" id="install">
         <div class="container">
           <div class="section-label">// install</div>
-          <h2>Get running in 60 seconds</h2>
+          <h2>Three steps</h2>
           <p class="section-lead">
-            No installer. Download the self-contained build, unzip, and run.
+            No installer. Self-contained build — the .NET runtime is in the zip.
           </p>
-          <pre class="code"><span class="c-comment"># 1. download &amp; unzip the latest release</span>
-<span class="c-prompt">PS&gt;</span> Invoke-WebRequest <span class="accent">{{ downloadUrl }}</span> -OutFile pop.zip
-<span class="c-prompt">PS&gt;</span> Expand-Archive pop.zip -DestinationPath .\popocatepetl
-
-<span class="c-comment"># 2. configure your SMTP credentials (one-time)</span>
-<span class="c-prompt">PS&gt;</span> cd .\popocatepetl
-<span class="c-prompt">PS&gt;</span> notepad appsettings.json
-
-<span class="c-comment"># 3. run it</span>
-<span class="c-prompt">PS&gt;</span> .\Popocatepetl.CLI.exe run --schedule daily</pre>
-        </div>
-      </section>
-
-      <section class="section" id="commands">
-        <div class="container">
-          <div class="section-label">// commands</div>
-          <h2>Command reference</h2>
-          <p class="section-lead">
-            Every command works on its own — chain them yourself or use
-            <code class="mono">run</code> to do it all at once.
-          </p>
-          <div class="cmd-list">
-            <div v-for="cmd in commands" :key="cmd.invocation" class="cmd">
-              <code>{{ cmd.invocation }}</code>
-              <span class="desc">{{ cmd.desc }}</span>
-            </div>
-          </div>
+          <ol class="steps">
+            <li>
+              <span class="step-num">01</span>
+              <div>
+                <strong>Download</strong> the latest release.
+                <a class="step-link" :href="downloadUrl">
+                  Popocatepetl.CLI-win-x64.zip ↓
+                </a>
+              </div>
+            </li>
+            <li>
+              <span class="step-num">02</span>
+              <div>
+                <strong>Unzip</strong> it anywhere — right-click → <em>Extract All</em>.
+              </div>
+            </li>
+            <li>
+              <span class="step-num">03</span>
+              <div>
+                <strong>Run</strong> <code class="mono">Popocatepetl.CLI.exe</code>
+                from the extracted folder.
+              </div>
+            </li>
+          </ol>
         </div>
       </section>
     </main>
