@@ -43,7 +43,7 @@ This repository contains a team project for the Notino C# seminar (Spring 2026) 
 | Email sending | SendGrid |
 | PDF export | QuestPDF |
 | CSV parsing | CsvHelper |
-| Tests | xUnit + FluentAssertions + NSubstitute |
+| Tests | xUnit + FluentAssertions + Moq |
 
 ## How to run
 

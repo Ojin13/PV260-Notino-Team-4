@@ -11,6 +11,8 @@ riderModule.iml
 
 # AI / IDE assistant files
 .claude/
+!.claude/skills/
+!.claude/skills/**
 .idea/
 
 
