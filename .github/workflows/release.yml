@@ -7,7 +7,7 @@ name: Release
 
 on:
   push:
-    branches: [main, milestone-2]
+    branches: [main]
   workflow_dispatch:
     inputs:
       prerelease:
@@ -44,29 +44,22 @@ jobs:
         id: ver
         shell: pwsh
         run: |
-          $tag      = "v$(Get-Date -Format 'yyyy.MM.dd').${{ github.run_number }}"
-          $refName  = '${{ github.ref_name }}'
-          $eventTyp = '${{ github.event_name }}'
-          $manualSuffix = '${{ inputs.tag_suffix }}'
+          $tag = "v$(Get-Date -Format 'yyyy.MM.dd').${{ github.run_number }}"
 
-          # Anything that isn't a push to main is a test/preview build:
-          # tag it with the branch name and flag it as a prerelease so the
-          # site's /releases/latest pointer keeps tracking real main builds.
-          $isMainPush = ($eventTyp -eq 'push') -and ($refName -eq 'main')
-
-          if ($eventTyp -eq 'workflow_dispatch') {
-            if ($manualSuffix) { $tag = "$tag-$manualSuffix" }
-            $prerelease = '${{ inputs.prerelease }}'  # 'true' or 'false'
-          } elseif ($isMainPush) {
-            $prerelease = 'false'
+          # Push to main = real release. Manual dispatch = prerelease by
+          # default (toggleable via the workflow_dispatch input), tagged
+          # with the provided suffix so it's visually distinct.
+          if ('${{ github.event_name }}' -eq 'workflow_dispatch') {
+            $suffix = '${{ inputs.tag_suffix }}'
+            if ($suffix) { $tag = "$tag-$suffix" }
+            $prerelease = '${{ inputs.prerelease }}'
           } else {
-            $tag = "$tag-$refName"
-            $prerelease = 'true'
+            $prerelease = 'false'
           }
 
-          "tag=$tag"                        | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          "name=Popocatepetl $tag"          | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          "prerelease=$prerelease"          | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "tag=$tag"               | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "name=Popocatepetl $tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "prerelease=$prerelease" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
       - name: Publish CLI (win-x64, self-contained, single-file)
         shell: pwsh
