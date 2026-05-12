@@ -2,21 +2,8 @@
 import TerminalWindow from '~/components/TerminalWindow.vue'
 
 const repoUrl = 'https://github.com/Ojin13/PV260-Notino-Team-4'
-
-// Temporary: no real release exists yet, so the download button points at
-// the latest milestone-2 prerelease. When the first push to main produces
-// a real release, delete `latestPrereleaseTag` and let downloadUrl /
-// releasesUrl fall back to `/releases/latest`, which auto-tracks the
-// newest non-prerelease.
-const latestPrereleaseTag = 'v2026.05.12.2-milestone-2'
-
-const downloadUrl = latestPrereleaseTag
-  ? `${repoUrl}/releases/download/${latestPrereleaseTag}/Popocatepetl.CLI-win-x64.zip`
-  : `${repoUrl}/releases/latest/download/Popocatepetl.CLI-win-x64.zip`
-
-const releasesUrl = latestPrereleaseTag
-  ? `${repoUrl}/releases/tag/${latestPrereleaseTag}`
-  : `${repoUrl}/releases/latest`
+const downloadUrl = `${repoUrl}/releases/latest/download/Popocatepetl.CLI-win-x64.zip`
+const releasesUrl = `${repoUrl}/releases`
 
 const features = [
   {
