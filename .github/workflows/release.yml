@@ -7,7 +7,7 @@ name: Release
 
 on:
   push:
-    branches: [main]
+    branches: [main, milestone-2]
   workflow_dispatch:
     inputs:
       prerelease:
@@ -40,15 +40,33 @@ jobs:
         with:
           dotnet-version: '10.0.x'
 
-      - name: Compute version
+      - name: Compute version & release flags
         id: ver
         shell: pwsh
         run: |
-          $tag = "v$(Get-Date -Format 'yyyy.MM.dd').${{ github.run_number }}"
-          $suffix = '${{ inputs.tag_suffix }}'
-          if ($suffix) { $tag = "$tag-$suffix" }
-          "tag=$tag"               | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-          "name=Popocatepetl $tag" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          $tag      = "v$(Get-Date -Format 'yyyy.MM.dd').${{ github.run_number }}"
+          $refName  = '${{ github.ref_name }}'
+          $eventTyp = '${{ github.event_name }}'
+          $manualSuffix = '${{ inputs.tag_suffix }}'
+
+          # Anything that isn't a push to main is a test/preview build:
+          # tag it with the branch name and flag it as a prerelease so the
+          # site's /releases/latest pointer keeps tracking real main builds.
+          $isMainPush = ($eventTyp -eq 'push') -and ($refName -eq 'main')
+
+          if ($eventTyp -eq 'workflow_dispatch') {
+            if ($manualSuffix) { $tag = "$tag-$manualSuffix" }
+            $prerelease = '${{ inputs.prerelease }}'  # 'true' or 'false'
+          } elseif ($isMainPush) {
+            $prerelease = 'false'
+          } else {
+            $tag = "$tag-$refName"
+            $prerelease = 'true'
+          }
+
+          "tag=$tag"                        | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "name=Popocatepetl $tag"          | Out-File -FilePath $env:GITHUB_OUTPUT -Append
+          "prerelease=$prerelease"          | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
       - name: Restore
         run: dotnet restore Popocatepetl.CLI/Popocatepetl.CLI.csproj
@@ -80,10 +98,9 @@ jobs:
           tag_name: ${{ steps.ver.outputs.tag }}
           name: ${{ steps.ver.outputs.name }}
           target_commitish: ${{ github.sha }}
-          # Manual dispatches default to prerelease so test builds don't
-          # replace /releases/latest, which the presentation site links to.
-          # Pushes to main always produce a real (non-prerelease) build.
-          prerelease: ${{ inputs.prerelease == true }}
+          # Computed in the version step: true for anything that isn't a
+          # push to main, so /releases/latest only ever tracks main builds.
+          prerelease: ${{ steps.ver.outputs.prerelease == 'true' }}
           generate_release_notes: true
           fail_on_unmatched_files: true
           files: Popocatepetl.CLI-win-x64.zip
