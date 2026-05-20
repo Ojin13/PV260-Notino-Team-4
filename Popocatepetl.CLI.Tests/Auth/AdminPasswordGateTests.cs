@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Options;
 using Popocatepetl.CLI.Auth;
 using Popocatepetl.CLI.Localization;
 using Popocatepetl.CLI.Prompts;
@@ -12,6 +13,7 @@ public class AdminPasswordGateTests
     private const string CorrectPassword = "JAHODOVÝDORT375";
 
     private static AdminPasswordGate BuildGate(Mock<ITextPrompt> prompt) => new(
+        Options.Create(new AdminOptions { Password = CorrectPassword }),
         prompt.Object,
         new TestConsole(),
         new FakeStringLocalizer<CliStrings>(),

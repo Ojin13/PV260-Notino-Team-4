@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Popocatepetl.Application.Common;
 using Popocatepetl.CLI.Auth;
@@ -20,8 +21,11 @@ namespace Popocatepetl.CLI;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddCli(this IServiceCollection services)
+    public static IServiceCollection AddCli(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddOptions<AdminOptions>()
+            .Bind(configuration.GetSection(AdminOptions.SectionName));
+
         services.AddLocalization();
 
         services.AddSingleton<CurrentUserContext>();

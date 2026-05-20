@@ -25,7 +25,7 @@ var builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings
 builder.Services
     .AddApplication()
     .AddInfrastructure(builder.Configuration)
-    .AddCli();
+    .AddCli(builder.Configuration);
 
 using var host = builder.Build();
 
