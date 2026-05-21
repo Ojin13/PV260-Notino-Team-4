@@ -105,4 +105,19 @@ public class SendEmailCommandHandlerTests : HandlerTestBase
             .Which.Message.Should().Contain("not-an-email");
         DiffResultRepository.Verify(r => r.GetLastAsync(), Times.Never);
     }
+
+    [Fact]
+    public async Task Handle_WhenEmailServiceThrows_ReturnsFailureResult()
+    {
+        SetupLatestDiff();
+        DiffExporter.Setup(e => e.ToCsv(SampleDiff, SampleDiff.DiffDataEntries)).Returns([]);
+        EmailService
+            .Setup(s => s.SendAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<string>>(), It.IsAny<MailAttachment?>()))
+            .ThrowsAsync(new Exception("Connection refused"));
+
+        var result = await Mediator.Send(new SendEmailCommand(Recipients, DiffExportFormat.Csv));
+
+        result.IsSuccess.Should().BeFalse();
+        result.ErrorMessage.Should().NotBeNullOrEmpty();
+    }
 }

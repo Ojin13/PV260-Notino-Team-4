@@ -88,20 +88,29 @@ public sealed class SendReportAction : IMenuAction
             return;
         }
 
+        Result<Unit>? result = null;
         try
         {
             await _console
                 .Status()
                 .Spinner(Spinner.Known.Dots)
                 .StartAsync(_loc["status.sending"].Value, async _ =>
-                    await _sender.Send(new SendEmailCommand(recipients, format), ct));
-
-            _console.MarkupLine($"[{palette.Success}]✓ {Markup.Escape(_loc["status.sent"].Value)}[/]");
+                {
+                    result = await _sender.Send(new SendEmailCommand(recipients, format), ct);
+                });
         }
         catch (Exception ex)
         {
             _console.MarkupLine($"[{palette.Error}]{Markup.Escape(_loc["error.send", ex.Message].Value)}[/]");
+            _chrome.WaitForContinue();
+            return;
         }
+
+        if (result!.IsSuccess)
+            _console.MarkupLine($"[{palette.Success}]✓ {Markup.Escape(_loc["status.sent"].Value)}[/]");
+        else
+            _console.MarkupLine($"[{palette.Error}]{Markup.Escape(_loc["error.send", result.ErrorMessage!].Value)}[/]");
+
         _chrome.WaitForContinue();
     }
 
