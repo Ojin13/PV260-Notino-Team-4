@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Popocatepetl.Application.Commands.Reports;
 using Popocatepetl.Application.Common;
 using Popocatepetl.Application.Dtos;
@@ -13,13 +14,15 @@ public sealed class DownloadLatestArkReportCommandHandler(
     IReportRepository reportRepository,
     IDiffResultRepository diffResultRepository,
     IDiffCalculator diffCalculator,
-    ICurrentUserContext currentUserContext)
+    ICurrentUserContext currentUserContext,
+    ILogger<DownloadLatestArkReportCommandHandler> logger)
     : IRequestHandler<DownloadLatestArkReportCommand, Result<DownloadLatestArkReportResponse>>
 {
     public async Task<Result<DownloadLatestArkReportResponse>> Handle(
         DownloadLatestArkReportCommand request,
         CancellationToken cancellationToken)
     {
+        logger.LogInformation("Processing download latest ARK report command for user: {Email}", currentUserContext.Email);
         if (currentUserContext.Role != Popocatepetl.Domain.Enums.UserRole.Admin)
         {
             return Result<DownloadLatestArkReportResponse>.Failure("Only admins can download reports.");
@@ -46,6 +49,7 @@ public sealed class DownloadLatestArkReportCommandHandler(
                 await diffResultRepository.AddAsync(diff);
             }
 
+            logger.LogInformation("Successfully downloaded the latest ARK report");
             return Result<DownloadLatestArkReportResponse>.Success(new DownloadLatestArkReportResponse(
                 report.Id,
                 report.FileName,
@@ -54,6 +58,7 @@ public sealed class DownloadLatestArkReportCommandHandler(
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error downloading and storing the latest ARK report");
             return Result<DownloadLatestArkReportResponse>.Failure(
                 $"Failed to download and store the latest report: {ex.Message}");
         }
