@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Popocatepetl.Application;
@@ -32,6 +31,8 @@ using var host = builder.Build();
 using var cts = new CancellationTokenSource();
 Console.CancelKeyPress += (_, e) => { e.Cancel = true; cts.Cancel(); };
 
+await host.StartAsync(cts.Token);
+
 await using var scope = host.Services.CreateAsyncScope();
 var sp = scope.ServiceProvider;
 
@@ -47,3 +48,5 @@ await sp.GetRequiredService<EmailLoginPrompt>().RunAsync(cts.Token);
 
 var root = sp.GetRequiredService<TopMenuFactory>().Build();
 await sp.GetRequiredService<StackNavigator>().RunAsync(root, cts.Token);
+
+await host.StopAsync();
