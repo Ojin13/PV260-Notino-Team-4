@@ -1,16 +1,15 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Popocatepetl.Application;
 using Popocatepetl.CLI;
-using Popocatepetl.CLI.Menus;
-using System.Globalization;
-using System.Text;
 using Popocatepetl.CLI.Localization;
+using Popocatepetl.CLI.Menus;
 using Popocatepetl.CLI.Navigation;
 using Popocatepetl.CLI.Theming;
-using Popocatepetl.Infrastructure;
+using Popocatepetl.Host;
 using Popocatepetl.Infrastructure.Data;
+using System.Globalization;
+using System.Text;
 
 Console.OutputEncoding = Encoding.UTF8;
 Console.InputEncoding = Encoding.UTF8;
@@ -22,8 +21,7 @@ var builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings
 });
 
 builder.Services
-    .AddApplication()
-    .AddInfrastructure(builder.Configuration)
+    .AddHostServices(builder.Configuration)
     .AddCli(builder.Configuration);
 
 using var host = builder.Build();
