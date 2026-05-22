@@ -2,7 +2,7 @@ namespace Popocatepetl.Domain.Entities;
 
 public class AppUser : BaseEntity
 {
-    public string Email { get; set; } = string.Empty;
+    public string Email { get; private set; } = string.Empty;
 
     private AppUser() { }
 
@@ -13,4 +13,9 @@ public class AppUser : BaseEntity
             CreatedAt = createdAt ?? DateTime.UtcNow,
             Email = email
         };
+
+    public void UpdateEmail(string email)
+    {
+        Email = email;
+    }
 }

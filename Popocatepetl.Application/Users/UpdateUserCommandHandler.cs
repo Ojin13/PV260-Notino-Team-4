@@ -14,7 +14,7 @@ public sealed class UpdateUserCommandHandler(
         var user = await userRepository.GetByIdAsync(request.Id)
             ?? throw new NotFoundException(nameof(AppUser), request.Id);
 
-        user.Email = request.Email;
+        user.UpdateEmail(request.Email);
         await userRepository.UpdateAsync(user);
     }
 }

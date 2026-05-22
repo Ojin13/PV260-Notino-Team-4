@@ -2,11 +2,11 @@ namespace Popocatepetl.Domain.Entities;
 
 public class Report : BaseEntity
 {
-    public string FileName { get; init; } = string.Empty;
-    public DateTime UploadedAt { get; init; }
-    public string UploadedByEmail { get; init; } = string.Empty;
-    public string RawContent { get; init; } = string.Empty;
-    public bool IsLatest { get; set; }
+    public string FileName { get; private set; } = string.Empty;
+    public DateTime UploadedAt { get; private set; }
+    public string UploadedByEmail { get; private set; } = string.Empty;
+    public string RawContent { get; private set; } = string.Empty;
+    public bool IsLatest { get; private set; }
 
     private Report() { }
 

@@ -2,11 +2,11 @@ namespace Popocatepetl.Domain.Entities;
 
 public class AuditLog : BaseEntity
 {
-    public string UserEmail { get; init; } = string.Empty;
-    public string Action { get; init; } = string.Empty;
-    public DateTime OccurredAt { get; init; }
-    public bool WasSuccessful { get; init; }
-    public string? Details { get; init; }
+    public string UserEmail { get; private set; } = string.Empty;
+    public string Action { get; private set; } = string.Empty;
+    public DateTime OccurredAt { get; private set; }
+    public bool WasSuccessful { get; private set; }
+    public string? Details { get; private set; }
 
     private AuditLog() { }
 
