@@ -4,8 +4,8 @@ namespace Popocatepetl.Domain.Entities;
 
 public class AppSetting
 {
-    public AppSettingType Type { get; init; }
-    public string Value { get; set; } = string.Empty;
+    public AppSettingType Type { get; private set; }
+    public string Value { get; private set; } = string.Empty;
 
     private AppSetting() { }
 
@@ -15,4 +15,9 @@ public class AppSetting
             Type = type,
             Value = value
         };
+
+    public void UpdateValue(string value)
+    {
+        Value = value;
+    }
 }

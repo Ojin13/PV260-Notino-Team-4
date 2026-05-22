@@ -4,12 +4,12 @@ namespace Popocatepetl.Domain.Entities;
 
 public class DiffData : BaseEntity
 {
-    public string Name { get; init; } = string.Empty;
-    public string Ticker { get; init; } = string.Empty;
-    public int Shares { get; init; }
-    public double SharesDiffPercent { get; init; }
-    public ShareDiffType ShareDiffType { get; init; }
-    public double WeightPercent { get; init; }
+    public string Name { get; private set; } = string.Empty;
+    public string Ticker { get; private set; } = string.Empty;
+    public int Shares { get; private set; }
+    public double SharesDiffPercent { get; private set; }
+    public ShareDiffType ShareDiffType { get; private set; }
+    public double WeightPercent { get; private set; }
 
     private DiffData() { }
 

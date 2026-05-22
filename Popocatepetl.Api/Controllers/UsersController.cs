@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Popocatepetl.Api.Dtos;
 using Popocatepetl.Application.Users;
-using Popocatepetl.Domain.Entities;
 
 namespace Popocatepetl.Api.Controllers;
 
@@ -11,27 +11,30 @@ public sealed class UsersController(ISender sender) : ControllerBase
 {
     /// <summary>Returns all registered users.</summary>
     [HttpGet]
-    [ProducesResponseType<IReadOnlyList<AppUser>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<IReadOnlyList<UserResponse>>(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll(CancellationToken ct)
-        => Ok(await sender.Send(new GetAllUsersQuery(), ct));
+    {
+        var users = await sender.Send(new GetAllUsersQuery(), ct);
+        return Ok(users.Select(UserResponse.FromEntity).ToList());
+    }
 
     /// <summary>Returns the user with the specified ID.</summary>
     [HttpGet("{id:guid}")]
-    [ProducesResponseType<AppUser>(StatusCodes.Status200OK)]
+    [ProducesResponseType<UserResponse>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
     {
         var user = await sender.Send(new GetUserByIdQuery(id), ct);
-        return user is null ? NotFound() : Ok(user);
+        return user is null ? NotFound() : Ok(UserResponse.FromEntity(user));
     }
 
     /// <summary>Creates a new user.</summary>
     [HttpPost]
-    [ProducesResponseType<AppUser>(StatusCodes.Status201Created)]
+    [ProducesResponseType<UserResponse>(StatusCodes.Status201Created)]
     public async Task<IActionResult> Create([FromBody] CreateUserRequest request, CancellationToken ct)
     {
         var user = await sender.Send(new CreateUserCommand(request.Email), ct);
-        return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
+        return CreatedAtAction(nameof(GetById), new { id = user.Id }, UserResponse.FromEntity(user));
     }
 
     /// <summary>Updates the email of an existing user.</summary>

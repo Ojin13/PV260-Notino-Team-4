@@ -25,7 +25,7 @@ public sealed class AppSettingRepository(PopocatepetlDbContext context) : IAppSe
         }
         else
         {
-            existing.Value = value;
+            existing.UpdateValue(value);
         }
         await context.SaveChangesAsync();
     }

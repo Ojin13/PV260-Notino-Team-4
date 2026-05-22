@@ -4,12 +4,12 @@ namespace Popocatepetl.Domain.Entities;
 
 public class DiffResult : BaseEntity
 {
-    public Guid BaselineReportId { get; init; }
-    public Guid CurrentReportId { get; init; }
-    public Report BaselineReport { get; init; } = null!;
-    public Report CurrentReport { get; init; } = null!;
-    public ICollection<DiffData> DiffDataEntries { get; init; } = new List<DiffData>();
-    public DateTime GeneratedAt { get; init; }
+    public Guid BaselineReportId { get; private set; }
+    public Guid CurrentReportId { get; private set; }
+    public Report BaselineReport { get; private set; } = null!;
+    public Report CurrentReport { get; private set; } = null!;
+    public ICollection<DiffData> DiffDataEntries { get; private set; } = new List<DiffData>();
+    public DateTime GeneratedAt { get; private set; }
 
     private DiffResult() { }
 
