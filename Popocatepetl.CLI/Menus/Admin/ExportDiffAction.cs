@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.Extensions.Localization;
 using Popocatepetl.Application.Common;
-using Popocatepetl.Application.Queries.Admin;
+using Popocatepetl.Application.Admin;
 using Popocatepetl.CLI.Localization;
 using Popocatepetl.CLI.Navigation;
 using Popocatepetl.CLI.Prompts;
@@ -62,7 +62,7 @@ public sealed class ExportDiffAction : IMenuAction
             },
             ct);
 
-        Application.Dtos.ExportDiffResponse? result;
+        ExportDiffResponse? result;
         try
         {
             result = await _console

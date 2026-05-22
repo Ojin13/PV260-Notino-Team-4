@@ -2,7 +2,7 @@ using System.Net;
 using System.Net.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Popocatepetl.Api.Tests.TestUtilities;
-using Popocatepetl.Application.Dtos;
+using Popocatepetl.Application.Reports;
 
 namespace Popocatepetl.Api.Tests.Integration;
 

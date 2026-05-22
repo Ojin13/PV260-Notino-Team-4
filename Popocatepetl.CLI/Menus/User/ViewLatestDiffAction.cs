@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.Extensions.Localization;
-using Popocatepetl.Application.Queries.UserRole;
+using Popocatepetl.Application.Reports;
 using Popocatepetl.CLI.Localization;
 using Popocatepetl.CLI.Navigation;
 using Popocatepetl.CLI.Theming;
