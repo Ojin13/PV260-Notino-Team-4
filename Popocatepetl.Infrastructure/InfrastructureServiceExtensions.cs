@@ -54,7 +54,9 @@ public static class InfrastructureServiceExtensions
         services.AddScoped<IAppSettingRepository, AppSettingRepository>();
 
         services.AddOptions<ResendOptions>()
-            .Bind(configuration.GetSection(ResendOptions.SectionName));
+            .Bind(configuration.GetSection(ResendOptions.SectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
         services.AddHttpClient<ResendClient>();
         services.Configure<ResendClientOptions>(o =>
         {
@@ -66,7 +68,8 @@ public static class InfrastructureServiceExtensions
         QuestPDF.Settings.License = LicenseType.Community;
         services.AddSingleton<IDiffExporter, DiffExporter>();
         services.AddOptions<ArkReportOptions>()
-            .Bind(configuration.GetSection(ArkReportOptions.SectionName));
+            .Bind(configuration.GetSection(ArkReportOptions.SectionName))
+            .ValidateOnStart();
         services.AddHttpClient<IArkReportClient, ArkReportClient>(client =>
         {
             client.Timeout = TimeSpan.FromSeconds(30);

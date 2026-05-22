@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Popocatepetl.Domain.Entities;
 using Popocatepetl.Domain.Interfaces;
@@ -8,7 +9,8 @@ namespace Popocatepetl.Infrastructure.Email;
 /// <summary>IEmailService implementation backed by the Resend API.</summary>
 public sealed class ResendEmailService(
     IResend resend,
-    IOptions<ResendOptions> options) : IEmailService
+    IOptions<ResendOptions> options,
+    ILogger<ResendEmailService> logger) : IEmailService
 {
     private readonly ResendOptions _options = options.Value;
 
@@ -18,6 +20,7 @@ public sealed class ResendEmailService(
         IEnumerable<string> recipients,
         MailAttachment? attachment = null)
     {
+        logger.LogInformation("Sending email from {FromAddress} to {recipients}", _options.FromAddress, string.Join(", ", recipients));
         var message = new EmailMessage
         {
             From = _options.FromAddress,
@@ -40,5 +43,9 @@ public sealed class ResendEmailService(
         }
 
         await resend.EmailSendAsync(message);
+        logger.LogInformation("Email sent from {FromAddress} to {Recipients}{AttachmentNote}",
+            _options.FromAddress,
+            string.Join(", ", recipients),
+            attachment is not null ? $" with attachment {attachment.FileName}" : string.Empty);
     }
 }

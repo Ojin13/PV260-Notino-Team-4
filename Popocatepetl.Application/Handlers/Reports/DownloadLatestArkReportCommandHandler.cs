@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.Extensions.Logging;
 using Popocatepetl.Application.Commands.Reports;
 using Popocatepetl.Application.Common;
 using Popocatepetl.Application.Dtos;
@@ -13,7 +14,8 @@ public sealed class DownloadLatestArkReportCommandHandler(
     IReportRepository reportRepository,
     IDiffResultRepository diffResultRepository,
     IDiffCalculator diffCalculator,
-    ICurrentUserContext currentUserContext)
+    ICurrentUserContext currentUserContext,
+    ILogger<DownloadLatestArkReportCommandHandler> logger)
     : IRequestHandler<DownloadLatestArkReportCommand, Result<DownloadLatestArkReportResponse>>
 {
     public async Task<Result<DownloadLatestArkReportResponse>> Handle(
@@ -22,6 +24,7 @@ public sealed class DownloadLatestArkReportCommandHandler(
     {
         if (currentUserContext.Role != Popocatepetl.Domain.Enums.UserRole.Admin)
         {
+            logger.LogWarning("Unauthorized download attempt by {Email}", currentUserContext.Email);
             return Result<DownloadLatestArkReportResponse>.Failure("Only admins can download reports.");
         }
 
@@ -30,6 +33,9 @@ public sealed class DownloadLatestArkReportCommandHandler(
             var downloadedReportContent = await arkReportClient.DownloadLatestAsync(cancellationToken);
             var previousLatest = await reportRepository.GetLatestAsync();
             var fileName = $"arkk_{DateTime.UtcNow:yyyyMMdd_HHmmss}.csv";
+
+            if (previousLatest is null)
+                logger.LogInformation("No previous report found — diff will not be calculated");
 
             var report = Report.Create(
                 fileName,
@@ -46,6 +52,7 @@ public sealed class DownloadLatestArkReportCommandHandler(
                 await diffResultRepository.AddAsync(diff);
             }
 
+            logger.LogInformation("Successfully downloaded the latest ARK report");
             return Result<DownloadLatestArkReportResponse>.Success(new DownloadLatestArkReportResponse(
                 report.Id,
                 report.FileName,
@@ -54,6 +61,7 @@ public sealed class DownloadLatestArkReportCommandHandler(
         }
         catch (Exception ex)
         {
+            logger.LogError(ex, "Error downloading and storing the latest ARK report");
             return Result<DownloadLatestArkReportResponse>.Failure(
                 $"Failed to download and store the latest report: {ex.Message}");
         }

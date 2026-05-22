@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging.Abstractions;
 using Popocatepetl.Domain.Entities;
 using Popocatepetl.Domain.Enums;
 using Popocatepetl.Infrastructure.DiffCalculator;
@@ -6,7 +7,8 @@ namespace Popocatepetl.Infrastructure.Tests.DiffCalculator;
 
 public sealed class DiffCalculatorTests
 {
-    private readonly Popocatepetl.Infrastructure.DiffCalculator.DiffCalculator _sut = new();
+    private readonly Popocatepetl.Infrastructure.DiffCalculator.DiffCalculator _sut =
+        new(NullLogger<Popocatepetl.Infrastructure.DiffCalculator.DiffCalculator>.Instance);
 
     [Fact]
     public void Calculate_WhenTickerIsNew_ReturnsNewRow()

@@ -17,7 +17,7 @@ public sealed class EmailController(ISender sender) : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Send([FromBody] SendEmailRequest request, CancellationToken ct)
     {
-        await sender.Send(new SendEmailCommand(request.Recipients, request.Format), ct);
-        return Accepted();
+        var result = await sender.Send(new SendEmailCommand(request.Recipients, request.Format), ct);
+        return result.IsSuccess ? Accepted() : BadRequest(result.ErrorMessage);
     }
 }

@@ -51,7 +51,7 @@ public class DiffResult : BaseEntity
             diffs.Add(DiffData.Create(
                 currentHolding.Name,
                 currentHolding.Ticker,
-                currentHolding.Shares,
+                sharesDelta,
                 diffPercent,
                 sharesDelta > 0 ? ShareDiffType.Increased : ShareDiffType.Decreased,
                 currentHolding.WeightPercent));

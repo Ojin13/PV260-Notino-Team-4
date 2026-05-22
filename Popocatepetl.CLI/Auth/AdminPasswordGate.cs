@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
 using Popocatepetl.CLI.Localization;
 using Popocatepetl.CLI.Prompts;
 using Popocatepetl.CLI.Theming;
@@ -8,19 +9,20 @@ namespace Popocatepetl.CLI.Auth;
 
 public sealed class AdminPasswordGate
 {
-    private const string AdminPassword = "JAHODOVÝDORT375";
-
+    private readonly AdminOptions _options;
     private readonly ITextPrompt _text;
     private readonly IAnsiConsole _console;
     private readonly IStringLocalizer<CliStrings> _loc;
     private readonly ThemeApplier _theme;
 
     public AdminPasswordGate(
+        IOptions<AdminOptions> options,
         ITextPrompt text,
         IAnsiConsole console,
         IStringLocalizer<CliStrings> loc,
         ThemeApplier theme)
     {
+        _options = options.Value;
         _text = text;
         _console = console;
         _loc = loc;
@@ -34,7 +36,7 @@ public sealed class AdminPasswordGate
             secret: true,
             ct: ct);
 
-        if (entered == AdminPassword)
+        if (entered == _options.Password)
         {
             return true;
         }
