@@ -2,9 +2,8 @@ using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Popocatepetl.Api.Services;
-using Popocatepetl.Application;
 using Popocatepetl.Application.Common;
-using Popocatepetl.Infrastructure;
+using Popocatepetl.Host;
 using Popocatepetl.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -74,8 +73,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddHostServices(builder.Configuration);
 
 builder.Services.AddScoped<ICurrentUserContext, HttpCurrentUserContext>();
 
@@ -83,16 +81,8 @@ var app = builder.Build();
 
 await using (var scope = app.Services.CreateAsyncScope())
 {
-    try
-    {
-        var db = scope.ServiceProvider.GetRequiredService<PopocatepetlDbContext>();
-        await db.Database.MigrateAsync();
-    }
-    catch (Exception ex)
-    {
-        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
-        logger.LogWarning(ex, "Database migration skipped (database may not be available).");
-    }
+    var db = scope.ServiceProvider.GetRequiredService<PopocatepetlDbContext>();
+    await db.Database.MigrateAsync();
 }
 
 // Middleware pipeline

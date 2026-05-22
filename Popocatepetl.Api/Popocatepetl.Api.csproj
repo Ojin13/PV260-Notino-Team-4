@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Popocatepetl.Application\Popocatepetl.Application.csproj" />
-    <ProjectReference Include="..\Popocatepetl.Infrastructure\Popocatepetl.Infrastructure.csproj" />
+    <ProjectReference Include="..\Popocatepetl.Host\Popocatepetl.Host.csproj" />
   </ItemGroup>
 
   <ItemGroup>
