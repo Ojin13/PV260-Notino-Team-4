@@ -1,7 +1,7 @@
 using System.Net.Mail;
 using MediatR;
 using Microsoft.Extensions.Localization;
-using Popocatepetl.Application.Commands;
+using Popocatepetl.Application.Email;
 using Popocatepetl.Application.Common;
 using Popocatepetl.CLI.Localization;
 using Popocatepetl.CLI.Navigation;

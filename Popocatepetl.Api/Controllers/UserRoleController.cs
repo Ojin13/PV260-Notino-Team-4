@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Popocatepetl.Application.Commands;
-using Popocatepetl.Application.Queries.UserRole;
+using Popocatepetl.Application.Reports;
 using Popocatepetl.Domain.Entities;
 
 namespace Popocatepetl.Api.Controllers

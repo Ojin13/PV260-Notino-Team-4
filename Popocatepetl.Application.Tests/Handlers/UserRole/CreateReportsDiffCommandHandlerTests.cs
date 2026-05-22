@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using Popocatepetl.Application.Commands;
+using Popocatepetl.Application.Reports;
 using Popocatepetl.Application.Common;
 using Popocatepetl.Application.Tests.TestUtilities;
 using Popocatepetl.Domain.Entities;

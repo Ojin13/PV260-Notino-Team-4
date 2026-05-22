@@ -1,4 +1,4 @@
-using Popocatepetl.Application.Commands;
+using Popocatepetl.Application.Email;
 using Popocatepetl.Application.Common;
 using Popocatepetl.Application.Tests.TestUtilities;
 using Popocatepetl.Domain.Entities;

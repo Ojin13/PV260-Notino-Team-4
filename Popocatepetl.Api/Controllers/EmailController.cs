@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Popocatepetl.Api.Dtos;
-using Popocatepetl.Application.Commands;
+using Popocatepetl.Application.Email;
 
 namespace Popocatepetl.Api.Controllers;
 

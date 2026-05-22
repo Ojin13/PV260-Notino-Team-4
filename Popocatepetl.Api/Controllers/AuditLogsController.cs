@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Popocatepetl.Application.Common;
-using Popocatepetl.Application.Queries.Admin;
+using Popocatepetl.Application.Admin;
 using Popocatepetl.Domain.Entities;
 using Popocatepetl.Domain.Enums;
 
