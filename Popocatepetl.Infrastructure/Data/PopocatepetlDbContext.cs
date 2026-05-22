@@ -6,8 +6,6 @@ namespace Popocatepetl.Infrastructure.Data;
 /// <summary>EF Core database context for the Popocatepetl application.</summary>
 public sealed class PopocatepetlDbContext(DbContextOptions<PopocatepetlDbContext> options) : DbContext(options)
 {
-    /// <summary>All registered users.</summary>
-    public DbSet<AppUser> Users => Set<AppUser>();
     public DbSet<AppSetting> AppSettings => Set<AppSetting>();
     public DbSet<AuditLog> AuditLogs => Set<AuditLog>();
     public DbSet<Report> Reports => Set<Report>();

@@ -32,25 +32,6 @@ namespace Popocatepetl.Infrastructure.Data.Migrations
                     b.ToTable("AppSettings");
                 });
 
-            modelBuilder.Entity("Popocatepetl.Domain.Entities.AppUser", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("Popocatepetl.Domain.Entities.AuditLog", b =>
                 {
                     b.Property<Guid>("Id")

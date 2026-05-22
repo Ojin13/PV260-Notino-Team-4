@@ -61,7 +61,6 @@ public sealed class ApiWebApplicationFactory : WebApplicationFactory<Program>, I
         await db.DiffResults.ExecuteDeleteAsync();
         await db.Reports.ExecuteDeleteAsync();
         await db.AuditLogs.ExecuteDeleteAsync();
-        await db.Users.ExecuteDeleteAsync();
     }
 
     public async Task SeedReportAsync(Report report)

@@ -46,7 +46,6 @@ public static class InfrastructureServiceExtensions
                     await AuditLogSeeder.SeedAsync(db);
                 }));
 
-        services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IReportRepository, ReportRepository>();
         services.AddScoped<IDiffResultRepository, DiffResultRepository>();
         services.AddScoped<IDiffCalculator, DiffCalculator.DiffCalculator>();
