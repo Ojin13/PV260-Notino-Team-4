@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Popocatepetl.Application.Common;
@@ -15,15 +14,13 @@ public sealed class SendEmailCommandHandler(
     IEmailService emailService,
     ILogger<SendEmailCommandHandler> logger) : IRequestHandler<SendEmailCommand, Result<Unit>>
 {
-    private static readonly EmailAddressAttribute EmailValidator = new();
-
     public async Task<Result<Unit>> Handle(SendEmailCommand request, CancellationToken cancellationToken)
     {
         if (request.Recipients is null || request.Recipients.Count == 0)
             throw new ArgumentException("At least one recipient is required.", nameof(request));
 
         var invalid = request.Recipients
-            .Where(r => string.IsNullOrWhiteSpace(r) || !EmailValidator.IsValid(r))
+            .Where(r => !EmailValidator.IsValid(r))
             .ToList();
 
         if (invalid.Count > 0)

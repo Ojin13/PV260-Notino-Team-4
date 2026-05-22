@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Popocatepetl.Application.Common;
 
 namespace Popocatepetl.Api.Validation;
 
@@ -6,15 +7,13 @@ namespace Popocatepetl.Api.Validation;
 [AttributeUsage(AttributeTargets.Property)]
 public sealed class EmailListAttribute : ValidationAttribute
 {
-    private static readonly EmailAddressAttribute EmailValidator = new();
-
     protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
     {
         if (value is not IEnumerable<string> emails)
             return ValidationResult.Success;
 
         var invalid = emails
-            .Where(e => string.IsNullOrWhiteSpace(e) || !EmailValidator.IsValid(e))
+            .Where(e => !EmailValidator.IsValid(e))
             .ToList();
 
         return invalid.Count == 0

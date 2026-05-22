@@ -1,4 +1,4 @@
-using System.Net.Mail;
+using Popocatepetl.Application.Common;
 using Popocatepetl.CLI.Prompts;
 using Popocatepetl.CLI.Services;
 
@@ -28,10 +28,9 @@ public sealed class EmailLoginPrompt
     private static ValidationResult ValidateEmail(string input)
     {
         if (string.IsNullOrWhiteSpace(input))
-        {
             return ValidationResult.Error("auth.email.empty");
-        }
-        return MailAddress.TryCreate(input, out _)
+
+        return EmailValidator.IsValid(input)
             ? ValidationResult.Ok()
             : ValidationResult.Error("auth.email.invalid");
     }
