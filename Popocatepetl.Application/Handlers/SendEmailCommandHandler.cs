@@ -51,6 +51,7 @@ public sealed class SendEmailCommandHandler(
             return Result<Unit>.Failure("Email delivery failed. Please check your configuration and try again.");
         }
 
+        logger.LogInformation("Email sent to {Recipients}", string.Join(", ", request.Recipients));
         return Result<Unit>.Success(Unit.Value);
     }
 

@@ -6,12 +6,19 @@ using Popocatepetl.Domain.Interfaces;
 
 namespace Popocatepetl.Application.Handlers.UserRole
 {
-    internal class GetDiffReportQueryHandler(IDiffResultRepository diffRepository, ILogger<GetDiffReportQueryHandler> logger) : IRequestHandler<GetDiffReportQuery, IReadOnlyList<DiffData>?>
+    internal class GetDiffReportQueryHandler(
+        IDiffResultRepository diffRepository,
+        ILogger<GetDiffReportQueryHandler> logger) : IRequestHandler<GetDiffReportQuery, IReadOnlyList<DiffData>?>
     {
         public async Task<IReadOnlyList<DiffData>?> Handle(GetDiffReportQuery request, CancellationToken cancellationToken)
         {
-            logger.LogInformation("Fetching diff report");
-            return (await diffRepository.GetLastAsync())?.DiffDataEntries.ToList();
+            var diff = await diffRepository.GetLastAsync();
+            if (diff is null)
+            {
+                logger.LogWarning("No diff result found");
+                return null;
+            }
+            return diff.DiffDataEntries.ToList();
         }
     }
 }

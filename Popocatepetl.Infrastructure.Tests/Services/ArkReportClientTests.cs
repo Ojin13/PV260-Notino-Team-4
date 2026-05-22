@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Http.Headers;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Popocatepetl.Infrastructure.Services;
 
@@ -83,7 +84,7 @@ public sealed class ArkReportClientTests
             LatestHoldingsUrl = "https://example.test/ark.csv"
         });
 
-        return new ArkReportClient(httpClient, options);
+        return new ArkReportClient(httpClient, options, NullLogger<ArkReportClient>.Instance);
     }
 
     private sealed class StubHttpMessageHandler(Func<HttpRequestMessage, HttpResponseMessage> responseFactory)

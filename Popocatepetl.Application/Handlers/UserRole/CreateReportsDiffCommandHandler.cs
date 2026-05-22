@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using Popocatepetl.Application.Commands;
-using Popocatepetl.Application.Common;
 using Popocatepetl.Domain.Entities;
 using Popocatepetl.Domain.Exceptions;
 using Popocatepetl.Domain.Interfaces;
@@ -17,7 +16,9 @@ public sealed class CreateReportsDiffCommandHandler(
 {
     public async Task<Unit> Handle(CreateReportsDiffCommand request, CancellationToken cancellationToken)
     {
-        logger.LogInformation("Processing create reports diff command");
+        logger.LogInformation("Calculating diff between baseline {BaselineId} and current {CurrentId}",
+            request.BaselineReportId, request.CurrentReportId);
+
         var baseline = await reportRepository.GetByIdAsync(request.BaselineReportId)
             ?? throw new NotFoundException(nameof(Report), request.BaselineReportId);
 
@@ -27,7 +28,6 @@ public sealed class CreateReportsDiffCommandHandler(
         var diffResult = diffCalculator.Calculate(baseline, current);
 
         await diffResultRepository.AddAsync(diffResult);
-        logger.LogInformation("Successfully created reports diff");
         return Unit.Value;
     }
 }

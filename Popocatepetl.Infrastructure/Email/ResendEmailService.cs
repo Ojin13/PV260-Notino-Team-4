@@ -43,5 +43,9 @@ public sealed class ResendEmailService(
         }
 
         await resend.EmailSendAsync(message);
+        logger.LogInformation("Email sent from {FromAddress} to {Recipients}{AttachmentNote}",
+            _options.FromAddress,
+            string.Join(", ", recipients),
+            attachment is not null ? $" with attachment {attachment.FileName}" : string.Empty);
     }
 }

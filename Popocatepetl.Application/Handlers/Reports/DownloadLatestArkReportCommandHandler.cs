@@ -22,9 +22,9 @@ public sealed class DownloadLatestArkReportCommandHandler(
         DownloadLatestArkReportCommand request,
         CancellationToken cancellationToken)
     {
-        logger.LogInformation("Processing download latest ARK report command for user: {Email}", currentUserContext.Email);
         if (currentUserContext.Role != Popocatepetl.Domain.Enums.UserRole.Admin)
         {
+            logger.LogWarning("Unauthorized download attempt by {Email}", currentUserContext.Email);
             return Result<DownloadLatestArkReportResponse>.Failure("Only admins can download reports.");
         }
 
@@ -33,6 +33,9 @@ public sealed class DownloadLatestArkReportCommandHandler(
             var downloadedReportContent = await arkReportClient.DownloadLatestAsync(cancellationToken);
             var previousLatest = await reportRepository.GetLatestAsync();
             var fileName = $"arkk_{DateTime.UtcNow:yyyyMMdd_HHmmss}.csv";
+
+            if (previousLatest is null)
+                logger.LogInformation("No previous report found — diff will not be calculated");
 
             var report = Report.Create(
                 fileName,

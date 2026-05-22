@@ -1,24 +1,26 @@
 using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
+using Microsoft.Extensions.Logging;
 using Popocatepetl.Domain.Entities;
 using Popocatepetl.Domain.Interfaces;
 
 namespace Popocatepetl.Infrastructure.DiffCalculator;
 
-public sealed class DiffCalculator : IDiffCalculator
+public sealed class DiffCalculator(ILogger<DiffCalculator> logger) : IDiffCalculator
 {
     public DiffResult Calculate(Report baseline, Report current)
     {
-        var baselineRows = ParseRows(baseline.RawContent);
-        var currentRows = ParseRows(current.RawContent);
+        var baselineRows = ParseRows(baseline.RawContent, "baseline");
+        var currentRows = ParseRows(current.RawContent, "current");
 
         return DiffResult.CreateFromHoldings(baseline.Id, current.Id, baselineRows, currentRows);
     }
 
-    private static IReadOnlyDictionary<string, HoldingSnapshot> ParseRows(string csvContent)
+    private IReadOnlyDictionary<string, HoldingSnapshot> ParseRows(string csvContent, string label)
     {
         var records = new Dictionary<string, HoldingSnapshot>(StringComparer.OrdinalIgnoreCase);
+        var skipped = 0;
 
         using var stringReader = new StringReader(csvContent);
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -40,6 +42,7 @@ public sealed class DiffCalculator : IDiffCalculator
                 var securityKey = GetSecurityKey(row.Ticker, row.Cusip);
                 if (string.IsNullOrWhiteSpace(securityKey))
                 {
+                    skipped++;
                     continue;
                 }
 
@@ -50,10 +53,16 @@ public sealed class DiffCalculator : IDiffCalculator
                     row.WeightPercent);
             }
         }
-        catch (HeaderValidationException)
+        catch (HeaderValidationException ex)
         {
+            logger.LogWarning(ex, "CSV header validation failed for {Label} report — treating as empty", label);
             return records;
         }
+
+        if (skipped > 0)
+            logger.LogWarning("Skipped {Skipped} rows with no identifiable security key in {Label} report", skipped, label);
+
+        logger.LogInformation("Parsed {Count} holdings from {Label} report", records.Count, label);
 
         return records;
     }

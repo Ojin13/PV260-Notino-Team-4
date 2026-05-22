@@ -1,33 +1,38 @@
 using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Popocatepetl.Domain.Interfaces;
 
 namespace Popocatepetl.Infrastructure.Services;
 
 /// <summary>Fetches ARK report data and converts it to the internal CSV format.</summary>
-public sealed class ArkReportClient(HttpClient httpClient, IOptions<ArkReportOptions> options) : IArkReportClient
+public sealed class ArkReportClient(
+    HttpClient httpClient,
+    IOptions<ArkReportOptions> options,
+    ILogger<ArkReportClient> logger) : IArkReportClient
 {
     private readonly string latestHoldingsUrl = options.Value.LatestHoldingsUrl;
 
     public async Task<string> DownloadLatestAsync(CancellationToken cancellationToken)
     {
+        logger.LogInformation("Downloading ARK report from {Url}", latestHoldingsUrl);
+
         using var response = await httpClient.GetAsync(latestHoldingsUrl, cancellationToken);
         response.EnsureSuccessStatusCode();
 
         var rawContent = await response.Content.ReadAsStringAsync(cancellationToken);
         if (string.IsNullOrWhiteSpace(rawContent))
         {
+            logger.LogError("ARK report endpoint returned an empty response");
             throw new InvalidOperationException("The ARK report endpoint returned an empty response.");
         }
 
-        var trimmedContent = ProjectToCompactCsv(rawContent);
-
-        return trimmedContent;
+        return ProjectToCompactCsv(rawContent);
     }
 
-    private static string ProjectToCompactCsv(string rawContent)
+    private string ProjectToCompactCsv(string rawContent)
     {
         using var stringReader = new StringReader(rawContent);
         var readerConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -43,6 +48,7 @@ public sealed class ArkReportClient(HttpClient httpClient, IOptions<ArkReportOpt
         csvReader.Context.RegisterClassMap<ArkRowMap>();
 
         var records = new List<CompactReportRow>();
+        var skipped = 0;
         foreach (var row in csvReader.GetRecords<ArkRow>())
         {
             if (string.IsNullOrWhiteSpace(row.Ticker) ||
@@ -50,6 +56,9 @@ public sealed class ArkReportClient(HttpClient httpClient, IOptions<ArkReportOpt
                 !TryParseShares(row.Shares, out var shares) ||
                 !TryParseWeightPercent(row.WeightPercent, out var weightPercent))
             {
+                skipped++;
+                logger.LogWarning("Skipping ARK row with unparseable data: Ticker={Ticker} Company={Company} Shares={Shares} Weight={Weight}",
+                    row.Ticker, row.Company, row.Shares, row.WeightPercent);
                 continue;
             }
 
@@ -62,8 +71,11 @@ public sealed class ArkReportClient(HttpClient httpClient, IOptions<ArkReportOpt
 
         if (records.Count == 0)
         {
+            logger.LogError("ARK report yielded no parseable holdings rows; {Skipped} rows were skipped", skipped);
             throw new InvalidOperationException("The ARK report did not contain any holdings rows that could be converted.");
         }
+
+        logger.LogInformation("Parsed {Count} ARK holdings rows, skipped {Skipped}", records.Count, skipped);
 
         using var output = new StringWriter(CultureInfo.InvariantCulture);
         var writerConfig = new CsvConfiguration(CultureInfo.InvariantCulture)
